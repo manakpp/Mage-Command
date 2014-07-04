@@ -1,8 +1,38 @@
 fileFormatVersion: 2
-guid: 385ce85336fc9634580257ba933d3d55
+guid: af07976662ac397468b78572a81d4d28
 ModelImporter:
   serializedVersion: 16
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: alpha_planes
+    100002: floor1
+    100004: main
+    100006: main_MeshPart0
+    100008: main_MeshPart1
+    100010: //RootNode
+    100012: water
+    400000: alpha_planes
+    400002: floor1
+    400004: main
+    400006: main_MeshPart0
+    400008: main_MeshPart1
+    400010: //RootNode
+    400012: water
+    2300000: alpha_planes
+    2300002: floor1
+    2300004: main_MeshPart0
+    2300006: main_MeshPart1
+    2300008: water
+    3300000: alpha_planes
+    3300002: floor1
+    3300004: main_MeshPart0
+    3300006: main_MeshPart1
+    3300008: water
+    4300000: alpha_planes
+    4300002: main_MeshPart0
+    4300004: main_MeshPart1
+    4300006: floor1
+    4300008: water
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
