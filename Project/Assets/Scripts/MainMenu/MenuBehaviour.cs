@@ -52,7 +52,7 @@ public class MenuBehaviour : MonoBehaviour
     public UIPanel m_panelControls          = null;
     public UIPanel m_panelCredits           = null;
 
-    public UIButton m_buttonSound           = null;
+    public UIButton m_buttonSound = null;
 
     EPanel m_activePanel                    = EPanel.INVALID;
 
