@@ -23,8 +23,17 @@ public class Explosion : MonoBehaviour
 
 	// Member Fields
 
+	private float m_lifeSpan = 2.0f;
+	private float m_timeElapsed = 0.0f;
+
 
 	// Member Methods
+
+	public void Explode()
+	{
+		m_timeElapsed = m_lifeSpan;
+		gameObject.SetActive(true);
+	}
 
 
 	void Start()
@@ -33,15 +42,14 @@ public class Explosion : MonoBehaviour
 	}
 
 
-	void OnDestroy()
-	{
-		// Empty
-	}
-
-
 	void Update()
 	{
-		// Empty
+		m_timeElapsed -= Time.deltaTime;
+
+		if(m_timeElapsed < 0.0f)
+		{
+			gameObject.SetActive(false);
+		}
 	}
 
 

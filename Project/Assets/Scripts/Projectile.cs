@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
 
 	private Vector3 m_velocity;
 	private Vector3 m_direction;
-	private float m_speed = 5.0f;
+	private float m_speed = 10.0f;
 	private bool m_initialised;
 
 

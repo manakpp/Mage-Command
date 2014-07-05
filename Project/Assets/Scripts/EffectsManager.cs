@@ -29,20 +29,27 @@ public class EffectsManager : Singleton<EffectsManager>
 
 	List<Explosion> m_explosions;
 
+	Dictionary<System.Type, List<MonoBehaviour>> m_effects; 
+
 	static EffectsManager s_instance;
-
-
 
 
 	// Member Methods
 
 	public Explosion CreateExplosion(Vector3 _startPosition)
 	{
-		var explosion = Instantiate(m_explosionPrefab.gameObject) as GameObject;
+		foreach (Explosion obj in m_explosions)
+		{
+			if (!obj.gameObject.activeSelf)
+			{
+				obj.transform.position = _startPosition;
+				obj.Explode();
 
-		explosion.transform.position = _startPosition;
+				return obj.GetComponent<Explosion>();
+			}
+		}
 
-		return explosion.GetComponent<Explosion>();
+		return null;
 	}
 
 
