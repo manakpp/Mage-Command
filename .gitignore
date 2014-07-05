@@ -11,3 +11,6 @@
 /*.userprefs
 /*.pidb
 /*.booproj
+/Project/*.csproj
+/Project/*.unityproj
+/Project/*.sln
