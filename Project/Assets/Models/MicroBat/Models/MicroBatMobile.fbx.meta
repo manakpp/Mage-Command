@@ -1,0 +1,308 @@
+fileFormatVersion: 2
+guid: 6631cc4df4e86b644baee4cb845a1535
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: back_wing_left_01
+    100002: back_wing_left_02
+    100004: back_wing_right_01
+    100006: back_wing_right_02
+    100008: bat
+    100010: body_bat
+    100012: butt_bat
+    100014: ear_left_01
+    100016: ear_left_02
+    100018: ear_right_01
+    100020: ear_right_02
+    100022: eye_l_bat
+    100024: eye_r_bat
+    100026: face_bat
+    100028: head_bat
+    100030: jaw
+    100032: left_paw_01
+    100034: left_paw_02
+    100036: left_shoulder_bat
+    100038: left_wing_01_bat
+    100040: left_wing_02_bat
+    100042: //RootNode
+    100044: mouth_corner_left
+    100046: mouth_corner_right
+    100048: right_paw_01
+    100050: right_paw_02
+    100052: right_shoulder_bat
+    100054: right_wing_01_bat
+    100056: right_wing_02_bat
+    100058: root_bat
+    100060: tail_01
+    100062: tail_02
+    400000: back_wing_left_01
+    400002: back_wing_left_02
+    400004: back_wing_right_01
+    400006: back_wing_right_02
+    400008: bat
+    400010: body_bat
+    400012: butt_bat
+    400014: ear_left_01
+    400016: ear_left_02
+    400018: ear_right_01
+    400020: ear_right_02
+    400022: eye_l_bat
+    400024: eye_r_bat
+    400026: face_bat
+    400028: head_bat
+    400030: jaw
+    400032: left_paw_01
+    400034: left_paw_02
+    400036: left_shoulder_bat
+    400038: left_wing_01_bat
+    400040: left_wing_02_bat
+    400042: //RootNode
+    400044: mouth_corner_left
+    400046: mouth_corner_right
+    400048: right_paw_01
+    400050: right_paw_02
+    400052: right_shoulder_bat
+    400054: right_wing_01_bat
+    400056: right_wing_02_bat
+    400058: root_bat
+    400060: tail_01
+    400062: tail_02
+    4300000: bat
+    7400000: MicroBatIdle
+    7400002: MicroBatAttack
+    9500000: //RootNode
+    13700000: bat
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: MicroBatIdle
+      takeName: Take 001
+      firstFrame: 10
+      lastFrame: 65
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root_bat
+        weight: 1
+      - path: root_bat/butt_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_left_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_left_01/back_wing_left_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_right_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_right_01/back_wing_right_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_left_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_left_01/ear_left_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_right_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_right_01/ear_right_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/eye_l_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/eye_r_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/face_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/jaw
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat/left_wing_01_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat/left_wing_01_bat/left_wing_02_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/mouth_corner_left
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/mouth_corner_right
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat/right_wing_01_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat/right_wing_01_bat/right_wing_02_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/tail_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/tail_01/tail_02
+        weight: 1
+      - path: root_bat/butt_bat/left_paw_01
+        weight: 1
+      - path: root_bat/butt_bat/left_paw_01/left_paw_02
+        weight: 1
+      - path: root_bat/butt_bat/right_paw_01
+        weight: 1
+      - path: root_bat/butt_bat/right_paw_01/right_paw_02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: MicroBatAttack
+      takeName: Take 001
+      firstFrame: 151
+      lastFrame: 170
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root_bat
+        weight: 1
+      - path: root_bat/butt_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_left_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_left_01/back_wing_left_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_right_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/back_wing_right_01/back_wing_right_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_left_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_left_01/ear_left_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_right_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/ear_right_01/ear_right_02
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/eye_l_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/eye_r_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/head_bat/face_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/jaw
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat/left_wing_01_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/left_shoulder_bat/left_wing_01_bat/left_wing_02_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/mouth_corner_left
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/mouth_corner_right
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat/right_wing_01_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/right_shoulder_bat/right_wing_01_bat/right_wing_02_bat
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/tail_01
+        weight: 1
+      - path: root_bat/butt_bat/body_bat/tail_01/tail_02
+        weight: 1
+      - path: root_bat/butt_bat/left_paw_01
+        weight: 1
+      - path: root_bat/butt_bat/left_paw_01/left_paw_02
+        weight: 1
+      - path: root_bat/butt_bat/right_paw_01
+        weight: 1
+      - path: root_bat/butt_bat/right_paw_01/right_paw_02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
