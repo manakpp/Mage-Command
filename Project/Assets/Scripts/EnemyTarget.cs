@@ -45,9 +45,4 @@ public class EnemyTarget : MonoBehaviour
 	}
 
 
-	void OnTriggerEnter(Collider _col)
-	{
-
-	}
-
 };

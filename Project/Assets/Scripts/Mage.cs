@@ -40,8 +40,7 @@ public class Mage : MonoBehaviour
 	void Start()
 	{
 		// Listen to player input
-		var controller = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
-		controller.EventOnShoot += Shoot;
+		Player.Instance.Controller.EventOnShoot += Shoot;
 
 
 		// Create a bunch of projectiles
@@ -63,7 +62,7 @@ public class Mage : MonoBehaviour
 
 	void OnDestroy()
 	{
-		// Empty
+		Player.Instance.Controller.EventOnShoot -= Shoot;
 	}
 
 

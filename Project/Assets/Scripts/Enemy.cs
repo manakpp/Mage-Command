@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour
 		m_isDead = false;
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = Vector3.zero;
+		m_hasReachedTarget = false;
 	}
 
 
@@ -100,6 +101,10 @@ public class Enemy : MonoBehaviour
 	{
 		m_hasReachedTarget = true;
 		transform.LookAt(transform.position + Vector3.forward);
+
+		Player.Instance.Health.Value -= 1;
+
+		Die();
 	}
 
 
