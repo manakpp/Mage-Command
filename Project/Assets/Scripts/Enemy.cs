@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
 	private float m_deathTimer;
 	private bool m_isDead;
 	private bool m_initialised;
+	private bool m_hasReachedTarget;
 
 
 	// Member Methods
@@ -66,7 +67,8 @@ public class Enemy : MonoBehaviour
 			return;
 		}
 
-		transform.position += transform.forward * 10.0f * Time.deltaTime;
+		if(!m_hasReachedTarget)
+			transform.position += transform.forward * 10.0f * Time.deltaTime;
 	}
 
 
@@ -78,12 +80,27 @@ public class Enemy : MonoBehaviour
 		if (m_isDead)
 			return;
 
+		if(_collision.gameObject.layer == LayerMask.NameToLayer("Explosion"))
+		{
+			rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
+		}
+
 		Die();
 	}
+
 
 	void Die()
 	{
 		m_isDead = true;
 		m_deathTimer = 3.0f;
 	}
+
+
+	void OnTriggerEnter(Collider _col)
+	{
+		m_hasReachedTarget = true;
+		transform.LookAt(transform.position + Vector3.forward);
+	}
+
+
 };
