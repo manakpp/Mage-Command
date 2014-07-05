@@ -24,6 +24,14 @@ public class GameMenuBehaviour : MonoBehaviour
     }
 
 
+    public struct TButtonColours
+    {
+        public Color normal;
+        public Color hover;
+        public Color press;
+    }
+
+
 // Member Delegates & Events
 
 
@@ -69,16 +77,20 @@ public class GameMenuBehaviour : MonoBehaviour
 // Member Fields
 
 
-    public UIPanel m_panelGame;
-    public UIPanel m_panelPause;
-    public UIPanel m_panelGameOver;
+    public UIPanel m_panelGame              = null;
+    public UIPanel m_panelPause             = null;
+    public UIPanel m_panelGameOver          = null;
 
-    public UIProgressBar m_progressbarMana;
+    public UIProgressBar m_progressbarMana  = null;
 
-    public UILabel m_labelCountdown = null;
+    public UIButton m_buttonSoundToggle     = null;
 
+    public UILabel m_labelCountdown         = null;
+
+
+    TButtonColours m_soundBtnDefaultColours;
     
-    EPanel m_activePanel = EPanel.INVALID;
+    EPanel m_activePanel                    = EPanel.INVALID;
 	
 
 // Member Methods
@@ -144,6 +156,8 @@ public class GameMenuBehaviour : MonoBehaviour
 
     public void OnSoundToggleButtonPress()
     {
+        Settings.Instance.SoundEnabled = !Settings.Instance.SoundEnabled;
+
         if (EventSoundToggleButtonPress != null)
             EventSoundToggleButtonPress(this);
     }
@@ -160,12 +174,23 @@ public class GameMenuBehaviour : MonoBehaviour
 	{
         // Set default panel
         SetPanel(EPanel.InGame);
+
+        // Sign up to sound change
+        Settings.Instance.EventSoundChanged += OnEventSoundChanged;
+
+        // Save sound button default colours
+        m_soundBtnDefaultColours.normal = m_buttonSoundToggle.defaultColor;
+        m_soundBtnDefaultColours.hover  = m_buttonSoundToggle.hover;
+        m_soundBtnDefaultColours.press  = m_buttonSoundToggle.pressed;
+
+        RefreshSoundToggleButton();
 	}
 
 
 	void OnDestroy()
 	{
-		// Empty
+        // De-register from sound change
+        Settings.Instance.EventSoundChanged -= OnEventSoundChanged;
 	}
 
 
@@ -173,6 +198,34 @@ public class GameMenuBehaviour : MonoBehaviour
 	{
 		// Empty
 	}
+
+
+    void OnEventSoundChanged(Settings _sender, bool _bEnabled)
+    {
+        RefreshSoundToggleButton();
+    }
+
+
+    public void RefreshSoundToggleButton()
+    {
+        // Restore default colours
+        if (Settings.Instance.SoundEnabled)
+        {
+            m_buttonSoundToggle.defaultColor    = m_soundBtnDefaultColours.normal;
+            m_buttonSoundToggle.hover           = m_soundBtnDefaultColours.hover;
+            m_buttonSoundToggle.pressed         = m_soundBtnDefaultColours.press;
+        }
+
+        // Set disabled colours
+        else
+        {
+            m_buttonSoundToggle.defaultColor    = Color.red;
+            m_buttonSoundToggle.hover           = Color.red;
+            m_buttonSoundToggle.pressed         = Color.red;
+        }
+
+        m_buttonSoundToggle.SetState(UIButtonColor.State.Normal, false);
+    }
 
 
 };

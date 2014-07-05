@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        // Empty
+        m_menuBehaviour.EventPlayButtonPress += OnEventPlayButtonPress;
     }
 
 
@@ -60,6 +60,12 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         // Empty
+    }
+
+
+    void OnEventPlayButtonPress(MenuBehaviour _sender)
+    {
+        Application.LoadLevel("Game");
     }
 
 

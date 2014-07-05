@@ -40,6 +40,10 @@ public class MenuBehaviour : MonoBehaviour
     public event OnPanelChangeHandler EventPanelChanged;
 
 
+    public delegate void OnPlayButtonPressHandler(MenuBehaviour _sender);
+    public event OnPlayButtonPressHandler EventPlayButtonPress;
+
+
 // Member Properties
 
 
@@ -52,11 +56,12 @@ public class MenuBehaviour : MonoBehaviour
     public UIPanel m_panelControls          = null;
     public UIPanel m_panelCredits           = null;
 
-    public UIButton m_buttonSound = null;
+    public UIButton m_buttonSound           = null;
 
-    EPanel m_activePanel                    = EPanel.INVALID;
 
     TButtonColours m_soundBtnDefaultColours;
+
+    EPanel m_activePanel                    = EPanel.INVALID;
 
 
 // Member Methods
@@ -112,7 +117,8 @@ public class MenuBehaviour : MonoBehaviour
 
     public void OnPlayButtonPress()
     {
-        Application.LoadLevel("Game");
+        if (EventPlayButtonPress != null)
+            EventPlayButtonPress(this);
     }
 
 
@@ -130,16 +136,7 @@ public class MenuBehaviour : MonoBehaviour
 
     public void OnSoundButtonPress()
     {
-        if (Settings.SoundEnabled)
-        {
-            Settings.SoundEnabled = false;
-        }
-        else
-        {
-            Settings.SoundEnabled = true;
-        }
-
-        RefreshSoundButtonState();
+        Settings.Instance.SoundEnabled = !Settings.Instance.SoundEnabled;
     }
 
 
@@ -166,18 +163,22 @@ public class MenuBehaviour : MonoBehaviour
         // Set default menu
         SetActivePanel(EPanel.Main);
 
+        // Sign up to sound change
+        Settings.Instance.EventSoundChanged += OnEventSoundChanged;
+
         // Save sound button default colours
         m_soundBtnDefaultColours.normal = m_buttonSound.defaultColor;
         m_soundBtnDefaultColours.hover = m_buttonSound.hover;
         m_soundBtnDefaultColours.press = m_buttonSound.pressed;
 
-        RefreshSoundButtonState();
+        RefreshSoundToggleButton();
     }
 
 
     void OnDestroy()
     {
-        // Empty
+        // De-register from sound change
+        Settings.Instance.EventSoundChanged -= OnEventSoundChanged;
     }
 
 
@@ -187,10 +188,16 @@ public class MenuBehaviour : MonoBehaviour
     }
 
 
-    void RefreshSoundButtonState()
+    void OnEventSoundChanged(Settings _sender, bool _bEnabled)
+    {
+        RefreshSoundToggleButton();
+    }
+
+
+    void RefreshSoundToggleButton()
     {
         // Restore default colours
-        if (Settings.SoundEnabled)
+        if (Settings.Instance.SoundEnabled)
         {
             m_buttonSound.defaultColor  = m_soundBtnDefaultColours.normal;
             m_buttonSound.hover         = m_soundBtnDefaultColours.hover;
