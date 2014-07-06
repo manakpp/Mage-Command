@@ -17,12 +17,11 @@ public sealed class ObjectPool : MonoBehaviour
 
 	public static void Restart()
 	{
-		//foreach (KeyValuePair<Component, List<Component>>  in _instance.objectLookup)
+		//foreach (KeyValuePair<Component, List<Component>> keyPair in _instance.objectLookup)
 		//{
-
-		//    foreach(var obj in list)
+		//    foreach (var obj in keyPair.Value)
 		//    {
-		//        obj.
+		//        obj.Recycle();
 		//    }
 		//}
 	}
