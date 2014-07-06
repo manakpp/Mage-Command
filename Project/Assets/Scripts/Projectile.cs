@@ -11,47 +11,57 @@ using System.Collections.Generic;
 
 public class Projectile : MonoBehaviour
 {
-
-	// Member Types
-
-
-	// Member Delegates & Events
+// Member Properties
 
 
-	// Member Properties
+// Member Fields
 
+	public Projectile m_projectile;
 	public Explosion m_explosionPrefab;
+	public ParticleTrail m_particleTrailPrefab;
 
-	private Vector3 m_velocity;
-	private Vector3 m_direction;
-	private float m_speed = 10.0f;
-	private bool m_initialised;
+	protected Vector3 m_velocity;
+	protected Vector3 m_direction;
+	protected ParticleTrail m_trail;
+	protected float m_speed = 10.0f;
+	protected bool m_initialised;
 
 
-	// Member Fields
-
-
-	// Member Methods
+// Member Methods
 
 
 	public void Shoot(Vector3 _start, Vector3 _destination)
 	{
 		transform.position = _start;
 		m_direction = (_destination - _start).normalized;
+
+		m_trail = ObjectPool.Spawn(m_particleTrailPrefab, _start);;
+		m_trail.Initialise(transform, 0.5f);
 	}
 
 	public void Explode(Vector3 _position)
 	{
-		this.Recycle();
+		Ray ray = new Ray(_position, Vector3.down);
+		RaycastHit hitInfo;
+		if (Physics.Raycast(ray, out hitInfo, 100.0f, 1 << LayerMask.NameToLayer("Ground")))
+		{
+			_position = hitInfo.point;
+			_position.y += 0.1f;
+		}
+
 		var explosion = m_explosionPrefab.Spawn(_position);
 		explosion.Explode();
+
+		m_trail.Detach();
+		m_trail = null;
+
+		this.Recycle();
 	}
 
 
 	void Awake()
 	{
 		gameObject.SetActive(false);
-		m_initialised = true;
 	}
 
 
@@ -69,9 +79,7 @@ public class Projectile : MonoBehaviour
 
 	void OnCollisionEnter(Collision _collision)
 	{
-		if (!m_initialised)
-			return;
-
-		Explode(transform.position);
+		if(gameObject.activeSelf)
+			Explode(transform.position);
 	}
 };

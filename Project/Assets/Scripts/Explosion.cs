@@ -22,22 +22,25 @@ public class Explosion : MonoBehaviour
 
 
 	// Member Fields
+	
+	public ParticleSystem m_particles;
 
-	private float m_lifeSpan = 2.0f;
+	private float m_lifeSpan = 1.0f;
 	private float m_timeElapsed = 0.0f;
-
+	
 
 	// Member Methods
 
 	public void Explode()
 	{
 		m_timeElapsed = m_lifeSpan;
-
+		m_particles.Play(true);
 	}
 
 
 	void Awake()
 	{
+		m_particles.Stop(true);
 		gameObject.SetActive(false);
 	}
 
@@ -48,6 +51,8 @@ public class Explosion : MonoBehaviour
 
 		if(m_timeElapsed < 0.0f)
 		{
+			m_particles.Clear(true);
+			m_particles.Stop(true);
 			this.Recycle();
 		}
 	}

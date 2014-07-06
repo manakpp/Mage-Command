@@ -87,13 +87,14 @@ public class Mage : MonoBehaviour
 		// Create a bunch of projectiles
 		ObjectPool.CreatePool(m_projectilePrefab, k_maxProjectiles);
 		ObjectPool.CreatePool(m_projectilePrefab.m_explosionPrefab, k_maxProjectiles);
+		ObjectPool.CreatePool(m_projectilePrefab.m_particleTrailPrefab, k_maxProjectiles + 10);
 	}
 
 
 	void Start()
 	{
 		// Listen to player input
-		GetComponent<MageController>().EventOnShoot += OnShoot;
+		GetComponent<MageController>().EventOnTap += OnTap;
 		Game.Instance.EventRestart += OnRestart;
 
 		Initialise();
@@ -116,7 +117,7 @@ public class Mage : MonoBehaviour
 
 	void OnDestroy()
 	{
-		GetComponent<MageController>().EventOnShoot -= OnShoot;
+		GetComponent<MageController>().EventOnTap -= OnTap;
 		Game.Instance.EventRestart -= OnRestart;
 	}
 
@@ -130,12 +131,12 @@ public class Mage : MonoBehaviour
 	}
 
 
-	void OnShoot(MageController _sender, Vector3 _destination)
+	void OnTap(MageController _sender, Vector3 _destination)
 	{
 		// Check for enough Mana
 		if (Mana > 0) // TODO: Check for enough Mana to cast this spell
 		{
-			Shoot(_destination);
+			CastFireBall(_destination);
 			Mana -= 1;
 		}
 		else
@@ -146,12 +147,15 @@ public class Mage : MonoBehaviour
 	}
 
 
-	void Shoot(Vector3 _destination)
+	void CastFireBall(Vector3 _destination)
 	{
 		Vector3 startPosition = transform.position + (_destination - transform.position).normalized;
 
 		var newProjectile = m_projectilePrefab.Spawn(startPosition);
-		
+
+		if (newProjectile == null)
+			return;
+
 		newProjectile.Shoot(startPosition, _destination);
 	}
 

@@ -16,8 +16,8 @@ public class MageController : MonoBehaviour
 
 
 	// Member Delegates & Events
-	public delegate void OnShootHandler(MageController _sender, Vector3 _destination);
-	public event OnShootHandler EventOnShoot;
+	public delegate void OnTapHandler(MageController _sender, Vector3 _destination);
+	public event OnTapHandler EventOnTap;
 
 
 	// Member Properties
@@ -51,8 +51,8 @@ public class MageController : MonoBehaviour
 			RaycastHit hitInfo;
 			if (Physics.Raycast(ray, out hitInfo, 10000.0f, m_touchLayerMask.value))
 			{
-				if (EventOnShoot != null)
-					EventOnShoot(this, hitInfo.point);
+				if (EventOnTap != null)
+					EventOnTap(this, hitInfo.point);
 			}
 		}
 	}
