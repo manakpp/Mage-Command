@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class EffectsManager : Singleton<EffectsManager>
+public class EffectsManager : Singleton2<EffectsManager>
 {
 
 	// Member Types

@@ -86,6 +86,7 @@ public class GameMenuBehaviour : MonoBehaviour
     public UIButton m_buttonSoundToggle     = null;
 
     public UILabel m_labelCountdown         = null;
+    public UILabel m_labelWave              = null;
 
 
     TButtonColours m_soundBtnDefaultColours;

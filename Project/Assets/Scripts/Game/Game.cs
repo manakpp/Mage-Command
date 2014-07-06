@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Game : Singleton<Game>
+public class Game : Singleton2<Game>
 {
 
 // Member Types
@@ -107,6 +107,13 @@ public class Game : Singleton<Game>
 
     public void GameOver()
     {
+        if (m_currentState == EState.GameOver)
+            return;
+
+        GameMenuBehaviour.SetPanel(GameMenuBehaviour.EPanel.GameOver);
+
+        m_currentState = EState.GameOver;
+
         // Notify observers
         if (EventGameOver != null)
             EventGameOver(this);

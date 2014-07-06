@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(PlayerHealth))]
 [RequireComponent(typeof(PlayerController))]
-public class Player : Singleton<Player>
+public class Player : Singleton2<Player>
 {
 
 	// Member Types
