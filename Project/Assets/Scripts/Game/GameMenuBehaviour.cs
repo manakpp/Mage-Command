@@ -87,6 +87,7 @@ public class GameMenuBehaviour : MonoBehaviour
 
     public UILabel m_labelCountdown         = null;
     public UILabel m_labelWave              = null;
+    public UILabel m_labelFPS               = null;
 
 
     TButtonColours m_soundBtnDefaultColours;
@@ -194,10 +195,21 @@ public class GameMenuBehaviour : MonoBehaviour
         Settings.Instance.EventSoundChanged -= OnEventSoundChanged;
 	}
 
+    float m_frameTimer = 0;
+    int m_frameCount = 0;
 
 	void Update()
 	{
-		// Empty
+        m_frameTimer += Time.deltaTime;
+        ++m_frameCount;
+
+        if (m_frameTimer > 1.0f)
+        {
+            m_labelFPS.text = "FPS: "+ m_frameCount.ToString();
+
+            m_frameCount = 0;
+            m_frameTimer = 0;
+        }
 	}
 
 
