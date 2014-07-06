@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
 
 			if (m_deathTimer < 0.0f)
 			{
-				gameObject.SetActive(false);
+				this.Recycle();
 			}
 
 			return;

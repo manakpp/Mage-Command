@@ -8,6 +8,7 @@ public sealed class ObjectPool : MonoBehaviour
 
 	Dictionary<Component, List<Component>> objectLookup = new Dictionary<Component, List<Component>>();
 	Dictionary<Component, Component> prefabLookup = new Dictionary<Component, Component>();
+	List<Component> toBeRemoved = new List<Component>();
 	
 	public static void Clear()
 	{
@@ -17,13 +18,24 @@ public sealed class ObjectPool : MonoBehaviour
 
 	public static void Restart()
 	{
-		//foreach (KeyValuePair<Component, List<Component>> keyPair in _instance.objectLookup)
-		//{
-		//    foreach (var obj in keyPair.Value)
-		//    {
-		//        obj.Recycle();
-		//    }
-		//}
+		foreach (var keyPair in instance.prefabLookup)
+		{
+			var obj = keyPair.Key;
+			obj.gameObject.SetActive(false);
+			obj.transform.parent = _instance.transform;
+
+			// Return to pool
+			instance.objectLookup[instance.prefabLookup[keyPair.Key]].Add(keyPair.Key);
+
+			instance.toBeRemoved.Add(keyPair.Key);
+		}
+
+		foreach (var obj in instance.toBeRemoved)
+		{
+			instance.prefabLookup.Remove(obj);	
+		}
+
+		instance.toBeRemoved.Clear();
 	}
 
 	public static void CreatePool<T>(T _prefab, int _startBuffer = 1) where T : Component
@@ -105,7 +117,6 @@ public sealed class ObjectPool : MonoBehaviour
 			instance.prefabLookup.Remove(obj);
 			obj.transform.parent = instance.transform;
 			obj.gameObject.SetActive(false);
-
 		}
 		else
 		{
