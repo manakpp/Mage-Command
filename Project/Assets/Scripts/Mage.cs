@@ -78,7 +78,9 @@ public class Mage : MonoBehaviour
 
 	void Shoot(PlayerController _sender, Vector3 _destination)
 	{
-		var newProjectile = GetNextInactiveProjectile();
+		//var newProjectile = GetNextInactiveProjectile();
+		var newProjectile = ObjectPool.Instance.GetObjectOfType(ObjectPool.EObjectPool.Projectile).GetComponent<Projectile>();
+		newProjectile.gameObject.SetActive(true);
 
 		if (newProjectile == null)
 		{

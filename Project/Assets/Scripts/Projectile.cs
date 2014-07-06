@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
 	{
 		transform.position = _start;
 		m_direction = (_destination - _start).normalized;
-
+		Debug.Log("GO");
 		gameObject.SetActive(true);
 	}
 
@@ -46,6 +46,8 @@ public class Projectile : MonoBehaviour
 		gameObject.SetActive(false);
 		Debug.Log(EffectsManager.Instance);
 		EffectsManager.Instance.CreateExplosion(_position);
+
+		ObjectPool.Instance.PoolObject(ObjectPool.EObjectPool.Projectile, this.gameObject);
 	}
 
 

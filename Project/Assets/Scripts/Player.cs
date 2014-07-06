@@ -43,8 +43,10 @@ public class Player : Singleton<Player>
 	// Member Methods
 
 
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		Controller = GetComponent<PlayerController>();
 		Health = GetComponent<PlayerHealth>();
 	}
