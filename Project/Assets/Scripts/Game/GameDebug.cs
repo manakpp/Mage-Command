@@ -41,6 +41,11 @@ public class GameDebug : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.RightAlt))
+        {
+            Game.Instance.GameOver();
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             Game.Instance.ResetAndPlay();

@@ -1,0 +1,15 @@
+2.7:
+Common Lib updated
+
+2.6:
+Refactor  Singletone -> Singleton
+Documentation update
+
+2.5:
+IAP Listener added
+Play Maker support added
+Play Service Version updated
+
+2.4:
+Compatibility Upgrade
+Compatibility Upgrade with Unity 4.5

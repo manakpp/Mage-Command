@@ -105,7 +105,7 @@ public class NGUIDebug : MonoBehaviour
 		Debug.DrawLine(new Vector3(v1.x, v0.y, c.z), new Vector3(v1.x, v1.y, c.z), Color.red);
 		Debug.DrawLine(new Vector3(v0.x, v1.y, c.z), new Vector3(v1.x, v1.y, c.z), Color.red);
 	}
-	
+	/*
 	void OnGUI()
 	{
 		if (mLines.Count == 0)
@@ -123,4 +123,5 @@ public class NGUIDebug : MonoBehaviour
 			}
 		}
 	}
+     * */
 }

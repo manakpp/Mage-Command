@@ -14,7 +14,7 @@ using UnityEngine;
 /// As a note, this is made as MonoBehaviour because we need Coroutines.
 /// http://wiki.unity3d.com/index.php?title=Singleton#Generic
 /// </summary>
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public class Singleton2<T> : MonoBehaviour where T : MonoBehaviour
 {
 	private static T _instance;
 
