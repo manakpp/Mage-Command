@@ -44,6 +44,7 @@ public class Projectile : MonoBehaviour
 	public void Explode(Vector3 _position)
 	{
 		gameObject.SetActive(false);
+		Debug.Log(EffectsManager.Instance);
 		EffectsManager.Instance.CreateExplosion(_position);
 	}
 

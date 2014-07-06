@@ -31,8 +31,6 @@ public class EffectsManager : Singleton<EffectsManager>
 
 	Dictionary<System.Type, List<MonoBehaviour>> m_effects; 
 
-	static EffectsManager s_instance;
-
 
 	// Member Methods
 

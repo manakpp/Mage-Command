@@ -59,10 +59,14 @@ public class Mage : MonoBehaviour
 		}
 	}
 
+	void OnDisable()
+	{
+	}
+
 
 	void OnDestroy()
 	{
-		Player.Instance.Controller.EventOnShoot -= Shoot;
+		
 	}
 
 
