@@ -20,6 +20,7 @@ public class Projectile : MonoBehaviour
 
 	// Member Properties
 
+	public Explosion m_explosionPrefab;
 
 	private Vector3 m_velocity;
 	private Vector3 m_direction;
@@ -37,21 +38,17 @@ public class Projectile : MonoBehaviour
 	{
 		transform.position = _start;
 		m_direction = (_destination - _start).normalized;
-		Debug.Log("GO");
-		gameObject.SetActive(true);
 	}
 
 	public void Explode(Vector3 _position)
 	{
-		gameObject.SetActive(false);
-		Debug.Log(EffectsManager.Instance);
-		EffectsManager.Instance.CreateExplosion(_position);
-
-		ObjectPool.Instance.PoolObject(ObjectPool.EObjectPool.Projectile, this.gameObject);
+		this.Recycle();
+		var explosion = m_explosionPrefab.Spawn(_position);
+		explosion.Explode();
 	}
 
 
-	void Start()
+	void Awake()
 	{
 		gameObject.SetActive(false);
 		m_initialised = true;

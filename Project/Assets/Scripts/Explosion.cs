@@ -32,11 +32,11 @@ public class Explosion : MonoBehaviour
 	public void Explode()
 	{
 		m_timeElapsed = m_lifeSpan;
-		gameObject.SetActive(true);
+
 	}
 
 
-	void Start()
+	void Awake()
 	{
 		gameObject.SetActive(false);
 	}
@@ -48,7 +48,7 @@ public class Explosion : MonoBehaviour
 
 		if(m_timeElapsed < 0.0f)
 		{
-			gameObject.SetActive(false);
+			this.Recycle();
 		}
 	}
 

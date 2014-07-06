@@ -1,171 +1,163 @@
-﻿//  
-//  File Name   :   ObjectPool.cs
-//  Adapted from : 
-// http://forum.unity3d.com/threads/simple-reusable-object-pool-help-limit-your-instantiations.76851/
-
-
-// Namespaces
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObjectPool : Singleton<ObjectPool>
+public sealed class ObjectPool : MonoBehaviour
 {
+	static ObjectPool _instance;
 
-// Member Types
-
-
-	[System.Serializable]
-	public struct TPooledObject
+	Dictionary<Component, List<Component>> objectLookup = new Dictionary<Component, List<Component>>();
+	Dictionary<Component, Component> prefabLookup = new Dictionary<Component, Component>();
+	
+	public static void Clear()
 	{
-		public EObjectPool type;
-		public GameObject prefab;
-		public int amountToBuffer;
+		instance.objectLookup.Clear();
+		instance.prefabLookup.Clear();
 	}
 
-
-	public enum EObjectPool
+	public static void CreatePool<T>(T _prefab, int _startBuffer = 1) where T : Component
 	{
-		Projectile,
-	}
-
-
-// Member Properties
-
-	public Dictionary<EObjectPool, List<GameObject>> PooledObjects
-	{
-		get { return m_pooledObjects; }
-	}
-
-
-// Member Fields
-
-	/// <summary>
-	/// The object prefabs which the pool can handle.
-	/// </summary>
-	public TPooledObject[] m_objectsToBePooled;
-
-	public int m_defaultBufferAmount = 3;
-
-	/// <summary>
-	/// The container object that we will keep unused pooled objects so we dont clog up the editor with objects.
-	/// </summary>
-	protected GameObject m_containerObject;
-
-	/// <summary>
-	/// The pooled objects currently available.
-	/// </summary>
-	private Dictionary<EObjectPool, List<GameObject>> m_pooledObjects;
-
-
-
-// Member Methods
-
-
-	void Start()
-	{
-		m_containerObject = new GameObject("ObjectPool");
-
-		//Loop through the object prefabs and make a new list for each one.
-		//We do this because the pool can only support prefabs set to it in the editor,
-		//so we can assume the lists of pooled objects are in the same order as object prefabs in the array
-		m_pooledObjects = new Dictionary<EObjectPool, List<GameObject>>(m_objectsToBePooled.Length);
-
-		foreach (TPooledObject pooledObject in m_objectsToBePooled)
+		if (!instance.objectLookup.ContainsKey(_prefab))
 		{
-			// Figure out amount to buffer
-			int bufferAmount = pooledObject.amountToBuffer;
-			if (pooledObject.amountToBuffer <= 0)
+			var objectBuffer = new List<Component>();
+
+			if (!instance.objectLookup.ContainsKey(_prefab))
 			{
-				bufferAmount = m_defaultBufferAmount;
-			}
+				instance.objectLookup[_prefab] = objectBuffer;
 
-			// Create new list if required
-			if (!m_pooledObjects.ContainsKey(pooledObject.type))
-				m_pooledObjects[pooledObject.type] = new List<GameObject>();
-			
-			// Create buffered amount of objects
-			for (int n = 0; n < bufferAmount; n++)
-			{
-				GameObject newObj = Instantiate(pooledObject.prefab) as GameObject;
-				newObj.name = pooledObject.prefab.name;
-				PoolObject(pooledObject.type, newObj);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Gets a new object for the name type provided.  If no object type exists or if onlypooled is true and there is no objects of that type in the pool
-	/// then null will be returned.
-	/// </summary>
-	/// <returns>
-	/// The object for type.
-	/// </returns>
-	/// <param name='objectType'>
-	/// Object type.
-	/// </param>
-	/// <param name='_onlyPooled'>
-	/// If true, it will only return an object if there is one currently pooled.
-	/// </param>
-	public GameObject GetObjectOfType(EObjectPool _pool, bool _onlyPooled = true)
-	{
-		if(!m_pooledObjects.ContainsKey(_pool))
-			return null;
-
-		var pool = m_pooledObjects[_pool];
-
-		if (pool.Count > 0)
-		{
-			GameObject pooledObject = pool[0];
-			pool.RemoveAt(0);
-			pooledObject.transform.parent = null;
-
-			return pooledObject;
-		}
-		else if (!_onlyPooled)
-		{
-			GameObject toInstantiate = null;
-
-			foreach (TPooledObject pooledObject in m_objectsToBePooled)
-			{
-				if (pooledObject.type == _pool)
+				for (int i = 0; i < _startBuffer; ++i)
 				{
-					toInstantiate = pooledObject.prefab;
-					break;
+					var obj = Instantiate(_prefab, Vector3.one * 1000.0f, Quaternion.identity) as T;
+					objectBuffer.Add(obj);
+
+					obj.transform.parent = instance.transform;
+				}
+			}
+		}
+	}
+	
+	public static T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, bool _mustBeFromPool = true) where T : Component
+	{
+		if (instance.objectLookup.ContainsKey(prefab))
+		{
+			T obj = null;
+
+			var list = instance.objectLookup[prefab];
+			if (list.Count > 0)
+			{
+				while (obj == null && list.Count > 0)
+				{
+					obj = list[0] as T;
+					list.RemoveAt(0);
+				}
+
+				if (obj != null)
+				{
+					obj.transform.parent = null;
+					obj.transform.localPosition = position;
+					obj.transform.localRotation = rotation;
+					obj.gameObject.SetActive(true);
+					instance.prefabLookup.Add(obj, prefab);
+					return (T)obj;
 				}
 			}
 
-			if (toInstantiate == null)
+			if (_mustBeFromPool)
 				return null;
 
-			GameObject newObj = Instantiate(toInstantiate) as GameObject;
-			newObj.name = toInstantiate.name;
+			obj = (T)Object.Instantiate(prefab, position, rotation);
+			instance.prefabLookup.Add(obj, prefab);
 
-			return newObj;
+			return (T)obj;
+		}
+		else if (_mustBeFromPool)
+		{
+			return null;
 		}
 
-		//If we have gotten here either there was no object of the specified type or non were left in the pool with onlyPooled set to true
-		return null;
+		return (T)Object.Instantiate(prefab, position, rotation);
+	}
+	public static T Spawn<T>(T prefab, Vector3 position, bool _mustBeFromPool = true) where T : Component
+	{
+		return Spawn(prefab, position, Quaternion.identity, _mustBeFromPool);
+	}
+	public static T Spawn<T>(T prefab, bool _mustBeFromPool = true) where T : Component
+	{
+		return Spawn(prefab, Vector3.zero, Quaternion.identity, _mustBeFromPool);
+	}
+
+	public static void Recycle<T>(T obj) where T : Component
+	{
+		if (instance.prefabLookup.ContainsKey(obj))
+		{
+			instance.objectLookup[instance.prefabLookup[obj]].Add(obj);
+			instance.prefabLookup.Remove(obj);
+			obj.transform.parent = instance.transform;
+			obj.gameObject.SetActive(false);
+
+		}
+		else
+		{
+			Object.Destroy(obj.gameObject);
+		}
+	}
+
+	public static int Count<T>(T prefab) where T : Component
+	{
+		if (instance.objectLookup.ContainsKey(prefab))
+			return instance.objectLookup[prefab].Count;
+		else
+			return 0;
+	}
+
+	public static ObjectPool instance
+	{
+		get
+		{
+			if (_instance != null)
+				return _instance;
+			var obj = new GameObject("_ObjectPool");
+			obj.transform.localPosition = Vector3.zero;
+			_instance = obj.AddComponent<ObjectPool>();
+			return _instance;
+		}
+	}
+}
+
+public static class ObjectPoolExtensions
+{
+	public static void CreatePool<T>(this T prefab) where T : Component
+	{
+		ObjectPool.CreatePool(prefab);
 	}
 
 
-	/// <summary>
-	/// Pools the object specified.  Will not be pooled if there is no prefab of that type.
-	/// </summary>
-	/// <param name='obj'>
-	/// Object to be pooled.
-	/// </param>
-	public void PoolObject(EObjectPool _pool, GameObject _obj)
+	public static T Spawn<T>(this T prefab, Vector3 position, Quaternion rotation, bool _mustBeFromPool = true) where T : Component
 	{
-		for (int i = 0; i < m_objectsToBePooled.Length; i++)
-		{
-			// Make sure this object is something that is pooled
-			if (m_objectsToBePooled[i].prefab.name == _obj.name)
-			{
-				_obj.transform.parent = m_containerObject.transform;
-				m_pooledObjects[_pool].Add(_obj);
-				return;
-			}
-		}
+		return ObjectPool.Spawn(prefab, position, rotation, _mustBeFromPool);
+	}
+
+
+	public static T Spawn<T>(this T prefab, Vector3 position, bool _mustBeFromPool = true) where T : Component
+	{
+		return ObjectPool.Spawn(prefab, position, Quaternion.identity, _mustBeFromPool);
+	}
+
+
+	public static T Spawn<T>(this T prefab, bool _mustBeFromPool = true) where T : Component
+	{
+		return ObjectPool.Spawn(prefab, Vector3.zero, Quaternion.identity, _mustBeFromPool);
+	}
+	
+
+	public static void Recycle<T>(this T obj) where T : Component
+	{
+		ObjectPool.Recycle(obj);
+	}
+
+
+	public static int Count<T>(T prefab) where T : Component
+	{
+		return ObjectPool.Count(prefab);
 	}
 }
