@@ -15,6 +15,18 @@ public sealed class ObjectPool : MonoBehaviour
 		instance.prefabLookup.Clear();
 	}
 
+	public static void Restart()
+	{
+		//foreach (KeyValuePair<Component, List<Component>>  in _instance.objectLookup)
+		//{
+
+		//    foreach(var obj in list)
+		//    {
+		//        obj.
+		//    }
+		//}
+	}
+
 	public static void CreatePool<T>(T _prefab, int _startBuffer = 1) where T : Component
 	{
 		if (!instance.objectLookup.ContainsKey(_prefab))

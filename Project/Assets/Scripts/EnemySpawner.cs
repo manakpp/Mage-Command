@@ -48,7 +48,6 @@ public class EnemySpawner : MonoBehaviour
 
 	void OnRestart(Game _sender)
 	{
-		DestroyAllActiveEnemies();
 		RandomiseTimer();
 	}
 
@@ -56,12 +55,6 @@ public class EnemySpawner : MonoBehaviour
 	void OnDestroy()
 	{
 		Game.Instance.EventRestart -= OnRestart;
-	}
-
-
-	void DestroyAllActiveEnemies()
-	{
-		
 	}
 
 

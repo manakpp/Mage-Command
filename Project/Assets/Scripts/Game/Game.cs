@@ -151,6 +151,8 @@ public class Game : MonoBehaviour
         GameMenuBehaviour.CountdownLabelVisible = true;
 
         m_currentState = EState.StartCountDown;
+
+		ObjectPool.Restart();
     }
 
 
@@ -183,7 +185,8 @@ public class Game : MonoBehaviour
 
 	void OnDestroy()
 	{
-
+		m_mage.EventManaChanged -= OnManaChanged;
+		m_mage.EventHealthChanged -= OnHealthChanged;
 	}
 
 
@@ -302,7 +305,7 @@ public class Game : MonoBehaviour
 	void OnHealthChanged(Mage _sender, int _currentHealth, int _maxHealth, int _prevHealth)
 	{
 		GameMenuBehaviour.SetHealthRatio((float)_currentHealth / (float)_maxHealth);
-
+		
 		if (_currentHealth == 0)
 			GameOver();
 	}

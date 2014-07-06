@@ -93,7 +93,7 @@ public class Mage : MonoBehaviour
 	void Start()
 	{
 		// Listen to player input
-		Game.Instance.Controller.EventOnShoot += OnShoot;
+		GetComponent<MageController>().EventOnShoot += OnShoot;
 		Game.Instance.EventRestart += OnRestart;
 
 		Initialise();
@@ -103,8 +103,8 @@ public class Mage : MonoBehaviour
 	void Initialise()
 	{
 		// Set up stats
-		m_health = m_maxHealth;
-		m_mana = m_maxMana;
+		Health = m_maxHealth;
+		Mana = m_maxMana;
 	}
 
 
@@ -116,7 +116,7 @@ public class Mage : MonoBehaviour
 
 	void OnDestroy()
 	{
-		Game.Instance.Controller.EventOnShoot -= OnShoot;
+		GetComponent<MageController>().EventOnShoot -= OnShoot;
 		Game.Instance.EventRestart -= OnRestart;
 	}
 
