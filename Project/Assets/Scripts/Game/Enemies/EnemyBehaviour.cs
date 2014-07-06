@@ -1,5 +1,5 @@
 ﻿//  
-//  File Name   :   Enemy.cs
+//  File Name   :   EnemyBehaviour.cs
 //
 
 
@@ -9,19 +9,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Enemy : MonoBehaviour
+public abstract class EnemyBehaviour : MonoBehaviour
 {
 
-	// Member Types
+// Member Types
 
 
-	// Member Delegates & Events
+// Member Delegates & Events
 
 
-	// Member Properties
+// Member Properties
 
 
-	// Member Fields
+// Member Fields
+
 
 	private float m_deathTimer;
 	private bool m_isDead;
@@ -29,7 +30,7 @@ public class Enemy : MonoBehaviour
 	private bool m_hasReachedTarget;
 
 
-	// Member Methods
+// Member Methods
 
 
 	public void Spawn()

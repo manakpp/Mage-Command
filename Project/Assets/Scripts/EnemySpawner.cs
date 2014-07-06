@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
 
 	// Member Fields
 
-	public Enemy m_enemyPrefab;
+	public EnemyBehaviour m_enemyPrefab;
 
 	const int k_maxEnemies = 20;
 
