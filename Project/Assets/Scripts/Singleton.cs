@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//  
+//  File Name   :   Settings.cs
+//
+
+
+// Namespaces
+using UnityEngine;
 
 /// <summary>
 /// Be aware this will not prevent a non singleton constructor
@@ -13,12 +19,14 @@ public class Singleton2<T> : MonoBehaviour where T : MonoBehaviour
 	private static T _instance;
 
 	private static object _lock = new object();
+	
+	private static bool applicationIsQuitting = false;
 
 	public static T Instance
 	{
 		get
 		{
-			if (applicationIsQuitting)
+			if (_instance != null && applicationIsQuitting)
 			{
 				Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
 					"' already destroyed on application quit." +
@@ -46,16 +54,9 @@ public class Singleton2<T> : MonoBehaviour where T : MonoBehaviour
 						_instance = singleton.AddComponent<T>();
 						singleton.name = "(singleton) " + typeof(T).ToString();
 
-						DontDestroyOnLoad(singleton);
-
 						Debug.Log("[Singleton] An instance of " + typeof(T) +
 							" is needed in the scene, so '" + singleton +
 							"' was created with DontDestroyOnLoad.");
-					}
-					else
-					{
-						Debug.Log("[Singleton] Using instance already created: " +
-							_instance.gameObject.name);
 					}
 				}
 
@@ -64,7 +65,11 @@ public class Singleton2<T> : MonoBehaviour where T : MonoBehaviour
 		}
 	}
 
-	private static bool applicationIsQuitting = false;
+	protected virtual void Awake()
+	{
+		applicationIsQuitting = false;
+	}
+
 	/// <summary>
 	/// When Unity quits, it destroys objects in a random order.
 	/// In principle, a Singleton is only destroyed when application quits.
@@ -73,7 +78,7 @@ public class Singleton2<T> : MonoBehaviour where T : MonoBehaviour
 	///   even after stopping playing the Application. Really bad!
 	/// So, this was made to be sure we're not creating that buggy ghost object.
 	/// </summary>
-	public void OnDestroy()
+	protected virtual void OnDestroy()
 	{
 		applicationIsQuitting = true;
 	}
