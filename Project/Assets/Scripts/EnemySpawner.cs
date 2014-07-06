@@ -25,8 +25,6 @@ public class EnemySpawner : MonoBehaviour
 
 	public Enemy m_enemyPrefab;
 
-	List<Enemy> m_enemies;
-
 	const int k_maxEnemies = 20;
 
 	float m_spawnTimer;
@@ -40,27 +38,30 @@ public class EnemySpawner : MonoBehaviour
 	void Start()
 	{
 		// Create a bunch of Explosions
-		var enemies = new GameObject("Enemies");
-		var enemiesTransform = enemies.transform;
+		ObjectPool.CreatePool(m_enemyPrefab, k_maxEnemies);
 
-		m_enemies = new List<Enemy>(k_maxEnemies);
+		RandomiseTimer();
 
-		for (int i = 0; i < k_maxEnemies; ++i)
-		{
-			// Create offscreen
-			var newProjectile = Instantiate(m_enemyPrefab.gameObject, Vector3.left * 1000.0f, Quaternion.identity) as GameObject;
-			newProjectile.transform.parent = enemiesTransform;
+		Game.Instance.EventRestart += OnRestart;
+	}
 
-			m_enemies.Add(newProjectile.GetComponent<Enemy>());
-		}
 
+	void OnRestart(Game _sender)
+	{
+		DestroyAllActiveEnemies();
 		RandomiseTimer();
 	}
 
 
 	void OnDestroy()
 	{
-		// Empty
+		Game.Instance.EventRestart -= OnRestart;
+	}
+
+
+	void DestroyAllActiveEnemies()
+	{
+		
 	}
 
 
@@ -81,28 +82,23 @@ public class EnemySpawner : MonoBehaviour
 
 	void SpawnEnemy()
 	{
-		foreach (Enemy enemy in m_enemies)
+		Vector3 extents = collider.bounds.extents;
+		Vector3 position = collider.bounds.center;
+
+		Vector3 startPosition = Vector3.zero;
+		startPosition.x = Random.Range(position.x - extents.x / 2.0f, position.x + extents.x / 2.0f);
+		startPosition.z = Random.Range(position.z - extents.z / 2.0f, position.z + extents.z / 2.0f);
+
+		var enemy = m_enemyPrefab.Spawn(startPosition);
+
+		if (enemy != null)
 		{
-			if (!enemy.gameObject.activeSelf)
-			{
-				Vector3 extents = collider.bounds.extents;
-				Vector3 position = collider.bounds.center;
+			var target = GameObject.FindGameObjectWithTag("Target");
+			enemy.transform.LookAt(target.transform);
 
-				Vector3 startPosition = Vector3.zero;
-				startPosition.x = Random.Range(position.x - extents.x / 2.0f, position.x + extents.x / 2.0f);
-				startPosition.z = Random.Range(position.z - extents.z / 2.0f, position.z + extents.z / 2.0f);
+			enemy.gameObject.SetActive(true);
 
-				enemy.transform.position = startPosition;
-
-				var target = GameObject.FindGameObjectWithTag("Target");
-				enemy.transform.LookAt(target.transform);
-
-				enemy.gameObject.SetActive(true);
-
-				enemy.Spawn();
-
-				break;
-			}
+			enemy.Spawn();
 		}
 
 		RandomiseTimer();

@@ -9,14 +9,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class PlayerController : MonoBehaviour
+public class MageController : MonoBehaviour
 {
 
 	// Member Types
 
 
 	// Member Delegates & Events
-	public delegate void OnShootHandler(PlayerController _sender, Vector3 _destination);
+	public delegate void OnShootHandler(MageController _sender, Vector3 _destination);
 	public event OnShootHandler EventOnShoot;
 
 

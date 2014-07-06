@@ -102,7 +102,7 @@ public class Enemy : MonoBehaviour
 		m_hasReachedTarget = true;
 		transform.LookAt(transform.position + Vector3.forward);
 
-		Player.Instance.Health.Value -= 1;
+		Game.Instance.Mage.Health -= 1;
 
 		Die();
 	}

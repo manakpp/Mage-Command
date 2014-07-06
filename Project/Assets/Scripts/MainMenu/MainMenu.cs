@@ -38,12 +38,17 @@ public class MainMenu : MonoBehaviour
 
     public MenuBehaviour m_menuBehaviour;
 
-
+	
     static MainMenu m_instance;
 
 
 // Member Methods
 
+
+	void Awake()
+	{
+		m_instance = this;
+	}
 
     void Start()
     {

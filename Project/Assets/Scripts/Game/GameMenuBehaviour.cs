@@ -82,6 +82,7 @@ public class GameMenuBehaviour : MonoBehaviour
     public UIPanel m_panelGameOver          = null;
 
     public UIProgressBar m_progressbarMana  = null;
+	public UIProgressBar m_progressbarHealth = null;
 
     public UIButton m_buttonSoundToggle     = null;
 
@@ -132,6 +133,12 @@ public class GameMenuBehaviour : MonoBehaviour
     {
         m_progressbarMana.value = _fRatio;
     }
+
+
+	public void SetHealthRatio(float _fRatio)
+	{
+		m_progressbarHealth.value = _fRatio;
+	}
 
 
     public void OnPauseButtonPress()

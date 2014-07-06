@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Game : Singleton2<Game>
+public class Game : MonoBehaviour
 {
 
 // Member Types
@@ -50,11 +50,25 @@ public class Game : Singleton2<Game>
 
 // Member Properties
 
+	public Mage Mage
+	{
+		get { return m_mage; }
+	}
 
-    GameMenuBehaviour GameMenuBehaviour
-    {
-        get { return (m_gameMenu.GetComponent<GameMenuBehaviour>()); }
-    }
+	public MageController Controller
+	{
+		get { return m_mage.GetComponent<MageController>(); }
+	}
+
+	public static Game Instance
+	{
+		get { return s_instance; }
+	}
+
+	GameMenuBehaviour GameMenuBehaviour
+	{
+		get { return (m_gameMenu.GetComponent<GameMenuBehaviour>()); }
+	}
 
 
 // Member Fields
@@ -64,10 +78,14 @@ public class Game : Singleton2<Game>
 
     public GameObject m_gameMenu    = null;
 
+	Mage m_mage						= null;
+
     EState m_currentState           = EState.INVALID;
     EState m_pausedOnState          = EState.INVALID;
 
     float m_startTimer              = k_startDelay;
+
+	static Game s_instance;
 
 
 // Member Methods
@@ -142,19 +160,31 @@ public class Game : Singleton2<Game>
     }
 
 
+	void Awake()
+	{
+		s_instance = this;
+	}
+
+
     void Start()
     {
         InitGameMenu();
 
         // Start game
         ResetAndPlay();
+
+		m_mage = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
+
+		// Sign up to stats change
+		m_mage.EventManaChanged += OnManaChanged;
+		m_mage.EventHealthChanged += OnHealthChanged;
     }
 
 
-    void OnDestroy()
-    {
-        // Empty
-    }
+	void OnDestroy()
+	{
+
+	}
 
 
     void Update()
@@ -263,4 +293,17 @@ public class Game : Singleton2<Game>
     }
 
 
+	void OnManaChanged(Mage _sender, float _currentMana, float _maxMana, float _prevMana)
+	{
+		GameMenuBehaviour.SetManaRatio(_currentMana / _maxMana);
+	}
+
+
+	void OnHealthChanged(Mage _sender, int _currentHealth, int _maxHealth, int _prevHealth)
+	{
+		GameMenuBehaviour.SetHealthRatio((float)_currentHealth / (float)_maxHealth);
+
+		if (_currentHealth == 0)
+			GameOver();
+	}
 };
