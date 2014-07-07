@@ -35,7 +35,7 @@ public class Projectile : MonoBehaviour
 		transform.position = _start;
 		m_direction = (_destination - _start).normalized;
 
-		m_trail = ObjectPool.Spawn(m_particleTrailPrefab, _start);;
+		m_trail = ObjectPool.Spawn(m_particleTrailPrefab.gameObject, _start).GetComponent<ParticleTrail>();
 		m_trail.Initialise(transform, 0.5f);
 	}
 
@@ -49,13 +49,13 @@ public class Projectile : MonoBehaviour
 			_position.y += 0.1f;
 		}
 
-		var explosion = m_explosionPrefab.Spawn(_position);
-		explosion.Explode();
+		var explosion = ObjectPool.Spawn(m_explosionPrefab.gameObject, _position);
+		explosion.GetComponent<Explosion>().Explode();
 
 		m_trail.Detach();
 		m_trail = null;
 
-		this.Recycle();
+		ObjectPool.Recycle(gameObject);
 	}
 
 

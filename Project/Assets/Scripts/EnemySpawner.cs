@@ -38,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
 	void Start()
 	{
 		// Create a bunch of Explosions
-		ObjectPool.CreatePool(m_enemyPrefab, k_maxEnemies);
+		ObjectPool.CreatePool(m_enemyPrefab.gameObject, k_maxEnemies);
 
 		RandomiseTimer();
 
@@ -82,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
 		startPosition.x = Random.Range(position.x - extents.x / 2.0f, position.x + extents.x / 2.0f);
 		startPosition.z = Random.Range(position.z - extents.z / 2.0f, position.z + extents.z / 2.0f);
 
-		var enemy = m_enemyPrefab.Spawn(startPosition);
+		var enemy = ObjectPool.Spawn(m_enemyPrefab.gameObject, startPosition);
 
 		if (enemy != null)
 		{
@@ -91,7 +91,7 @@ public class EnemySpawner : MonoBehaviour
 
 			enemy.gameObject.SetActive(true);
 
-			enemy.Spawn();
+			enemy.GetComponent<EnemyBehaviour>().Spawn();
 		}
 
 		RandomiseTimer();

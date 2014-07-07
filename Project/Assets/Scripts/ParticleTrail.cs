@@ -43,7 +43,7 @@ public class ParticleTrail : MonoBehaviour
 	public void Detach()
 	{
 		m_isAttached = false;
-		this.EnterActiveGroup();
+		ObjectPool.EnterActiveGroup(gameObject);
 	}
 
 
@@ -65,7 +65,7 @@ public class ParticleTrail : MonoBehaviour
 			{
 				m_particles.Clear(true);
 				m_particles.Stop(true);
-				this.Recycle();
+				ObjectPool.Recycle(gameObject);
 			}
 		}
 	}
