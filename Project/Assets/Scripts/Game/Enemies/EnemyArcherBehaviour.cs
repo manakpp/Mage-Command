@@ -32,19 +32,21 @@ public class EnemyArcherBehaviour : EnemyBehaviour
 
     void Awake()
     {
+        base.Awake();
+
         MovementSpeed = 4;
     }
 
 
 	void Start()
 	{
-		// Empty
+        base.Start();
 	}
 
 
 	void OnDestroy()
 	{
-		// Empty
+        base.OnDestroy();
 	}
 
 

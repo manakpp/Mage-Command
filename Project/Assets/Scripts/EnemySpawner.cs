@@ -42,16 +42,15 @@ public class EnemySpawner : MonoBehaviour
     const int k_maxCasters  = 10;
     const int k_maxBosses   = 4;
 
-
     public GameObject m_skeletonGrunt   = null;
     public GameObject m_skeletonArcher  = null;
     public GameObject m_skeletonWarrior = null;
     public GameObject m_skeletonCaster  = null;
     public GameObject m_skeletonBoss    = null;
 
-	float m_spawnTimer              = 0.0f;
-	float m_spawnTimerMax           = 3.0f;
-	float m_spawnTimerMin           = 1.5f;
+	float m_spawnTimer      = 0.0f;
+	float m_spawnTimerMax   = 3.0f;
+	float m_spawnTimerMin   = 1.5f;
 
 
 // Member Methods
@@ -110,7 +109,6 @@ public class EnemySpawner : MonoBehaviour
 		//var enemy = ObjectPool.Spawn(m_enemyPrefab.gameObject, startPosition);
 
         int enemyType = Random.Range(0, (int)EEnemyType.MAX);
-        enemyType = (int)EEnemyType.Archer;
 
         GameObject enemy = null;
 
@@ -137,6 +135,8 @@ public class EnemySpawner : MonoBehaviour
                 break;
         }
 
+        enemy.transform.rotation = Quaternion.LookRotation(Vector3.left);
+
 
         /* 
 		var enemy = 
@@ -158,7 +158,7 @@ public class EnemySpawner : MonoBehaviour
 
 	void RandomiseTimer()
 	{
-		//m_spawnTimer = Random.Range(m_spawnTimerMin, m_spawnTimerMax);
+		m_spawnTimer = Random.Range(m_spawnTimerMin, m_spawnTimerMax);
 	}
 
 

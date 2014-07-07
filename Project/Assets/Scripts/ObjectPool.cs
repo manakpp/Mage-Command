@@ -115,12 +115,12 @@ public sealed class ObjectPool : MonoBehaviour
 
 	public static GameObject Spawn(GameObject _prefab, Vector3 _position, bool _mustBeFromPool = true)
 	{
-		return Spawn(_prefab, _position, Quaternion.identity, _mustBeFromPool);
+        return Spawn(_prefab, _position, _prefab.transform.rotation, _mustBeFromPool);
 	}
 
 	public static GameObject Spawn(GameObject _prefab, bool _mustBeFromPool = true)
 	{
-		return Spawn(_prefab, Vector3.zero, Quaternion.identity, _mustBeFromPool);
+        return Spawn(_prefab, Vector3.zero, _prefab.transform.rotation, _mustBeFromPool);
 	}
 
 	public static void Recycle(GameObject _object)

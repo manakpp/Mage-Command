@@ -45,6 +45,19 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	}
 
 
+    protected void Awake()
+    {
+        
+    }
+
+
+    protected void Start()
+    {
+        gameObject.SetActive(false);
+        m_initialised = true;
+    }
+
+
     protected void Update()
     {
         if (m_deathTimer > 0.0f)
@@ -67,14 +80,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     }
 
 
-	void Start()
-	{
-		gameObject.SetActive(false);
-		m_initialised = true;
-	}
-
-
-	void OnDestroy()
+    protected void OnDestroy()
 	{
 		// Empty
 	}
