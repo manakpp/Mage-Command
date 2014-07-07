@@ -15,6 +15,14 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Types
 
 
+    public enum EState
+    {
+        INVALID,
+        MovingTowardsBarricade,
+        AttackingBarricade,
+    }
+
+
 // Member Delegates & Events
 
 
@@ -27,10 +35,9 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Fields
 
 
-	private float m_deathTimer;
-	private bool m_isDead;
-	private bool m_initialised;
-	private bool m_hasReachedTarget;
+    EState m_currentState = EState.INVALID;
+
+	bool m_isDead;
 
 
 // Member Methods
@@ -39,10 +46,13 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	public void Spawn()
 	{
 		m_isDead = false;
-		rigidbody.velocity = Vector3.zero;
-		rigidbody.angularVelocity = Vector3.zero;
-		m_hasReachedTarget = false;
 	}
+
+
+    public void Kill()
+    {
+        m_isDead = true;
+    }
 
 
     protected void Awake()
@@ -54,29 +64,26 @@ public abstract class EnemyBehaviour : MonoBehaviour
     protected void Start()
     {
         gameObject.SetActive(false);
-        m_initialised = true;
     }
 
 
     protected void Update()
     {
-        if (m_deathTimer > 0.0f)
+        switch (m_currentState)
         {
-            m_deathTimer -= Time.deltaTime;
+            case EState.MovingTowardsBarricade:
+                UpdateStateMovingTowardsTarget();
+                break;
 
-            if (m_deathTimer < 0.0f)
-            {
-                ObjectPool.Recycle(gameObject);
-            }
+            case EState.AttackingBarricade:
+                UpdateStateAttackingBarricade();
+                break;
 
-            return;
+            default:
+                Debug.LogError("Unknown state: " + m_currentState);
+                break;
+
         }
-
-        //if (!m_hasReachedTarget)
-         //   transform.position += transform.forward * 10.0f * Time.deltaTime;
-
-
-        UpdateMovement();
     }
 
 
@@ -86,17 +93,21 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	}
 
 
-    void UpdateMovement()
+    void UpdateStateMovingTowardsTarget()
     {
+        // Update movement
         transform.position += Vector3.left * MovementSpeed * Time.deltaTime;
+    }
+
+
+    void UpdateStateAttackingBarricade()
+    {
+
     }
 
 
 	void OnCollisionEnter(Collision _collision)
 	{
-		if (!m_initialised)
-			return;
-
 		if (m_isDead)
 			return;
 
@@ -104,26 +115,13 @@ public abstract class EnemyBehaviour : MonoBehaviour
 		{
 			rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
 		}
-
-		Die();
 	}
 
 
-	void Die()
+	void OnTriggerEnter(Collider _otherCollider)
 	{
-		m_isDead = true;
-		m_deathTimer = 3.0f;
-	}
 
-
-	void OnTriggerEnter(Collider _col)
-	{
-		m_hasReachedTarget = true;
-		transform.LookAt(transform.position + Vector3.forward);
-
-		Game.Instance.Mage.Health -= 1;
-
-		Die();
+		// Game.Instance.Mage.Health -= 1;
 	}
 
 
