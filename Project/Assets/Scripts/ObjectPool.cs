@@ -40,20 +40,23 @@ public sealed class ObjectPool : MonoBehaviour
 		Instance.toBeRemoved.Clear();
 	}
 
-	public static void CreatePool<T>(T _prefab, int _startBuffer = 1) where T : Component
+	public static void CreatePool<T>(T _component, int _startBuffer = 1) where T : Component
 	{
-		if (!Instance.objectLookup.ContainsKey(_prefab))
+		if (!Instance.objectLookup.ContainsKey(_component))
 		{
 			var objectBuffer = new List<Component>();
 
-			if (!Instance.objectLookup.ContainsKey(_prefab))
+			if (!Instance.objectLookup.ContainsKey(_component))
 			{
-				Instance.objectLookup[_prefab] = objectBuffer;
+				Instance.objectLookup[_component] = objectBuffer;
 
 				for (int i = 0; i < _startBuffer; ++i)
 				{
-					var obj = Instantiate(_prefab, Vector3.one * 1000.0f, Quaternion.identity) as T;
-					objectBuffer.Add(obj);
+					var obj = Instantiate(_component.gameObject, Vector3.one * 1000.0f, Quaternion.identity) as GameObject;
+
+					var component = obj.GetComponent(typeof(T)) as T;
+
+					objectBuffer.Add(component);
 
 					obj.transform.parent = Instance.transform;
 				}
@@ -61,47 +64,58 @@ public sealed class ObjectPool : MonoBehaviour
 		}
 	}
 	
-	public static T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, bool _mustBeFromPool = true) where T : Component
+	public static T Spawn<T>(T _component, Vector3 position, Quaternion rotation, bool _mustBeFromPool = true) where T : Component
 	{
-		if (Instance.objectLookup.ContainsKey(prefab))
+		// Does this component exist in a pool?
+		if (Instance.objectLookup.ContainsKey(_component))
 		{
-			T obj = null;
+			T newComponent = null;
 
-			var list = Instance.objectLookup[prefab];
+			// Get the pool
+			var list = Instance.objectLookup[_component];
 			if (list.Count > 0)
 			{
-				while (obj == null && list.Count > 0)
+				// Take one of the pooled components from the pool
+				while (newComponent == null && list.Count > 0)
 				{
-					obj = list[0] as T;
+					newComponent = list[0] as T;
 					list.RemoveAt(0);
 				}
 
-				if (obj != null)
+				// Return the component
+				if (newComponent != null)
 				{
-					obj.transform.parent = Instance.m_activeGameobjectsParent.transform;
-					obj.transform.localPosition = position;
-					obj.transform.localRotation = rotation;
-					obj.gameObject.SetActive(true);
-					Instance.prefabLookup.Add(obj, prefab);
+					newComponent.transform.parent = Instance.m_activeGameobjectsParent.transform;
+					newComponent.transform.localPosition = position;
+					newComponent.transform.localRotation = rotation;
+					newComponent.gameObject.SetActive(true);
+					Instance.prefabLookup.Add(newComponent, _component);
 
-					return (T)obj;
+					return (T)newComponent;
 				}
 			}
 
+			// There doesn't seem to be components left in the pool. If we must grab from pool then return now.
 			if (_mustBeFromPool)
 				return null;
 
-			obj = (T)Object.Instantiate(prefab, position, rotation);
-			Instance.prefabLookup.Add(obj, prefab);
+			// Else add more to the pool and return it
+			var obj = Instantiate(_component.gameObject, position, rotation) as GameObject;
+			newComponent = obj.GetComponent(typeof(T)) as T;
+			Instance.prefabLookup.Add(newComponent, _component);
 
-			return (T)obj;
+			return (T)newComponent;
 		}
 		else if (_mustBeFromPool)
 		{
 			return null;
 		}
 
-		return (T)Object.Instantiate(prefab, position, rotation);
+		// This component does not belong to a prefab. Create it in a global space.
+		var unpooledObject = Instantiate(_component.gameObject, position, rotation) as GameObject;
+		var unpooledComponent = unpooledObject.GetComponent(typeof(T)) as T;
+
+		return unpooledComponent;
 	}
 	public static T Spawn<T>(T prefab, Vector3 position, bool _mustBeFromPool = true) where T : Component
 	{
