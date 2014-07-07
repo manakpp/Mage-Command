@@ -156,7 +156,11 @@ public class Mage : MonoBehaviour
 		if (newProjectile == null)
 			return;
 
-		newProjectile.GetComponent<FireBall>().Shoot(startPosition, _destination);
+		var ball = newProjectile.GetComponent<FireBall>();
+		ball.Shoot(startPosition, _destination);
+
+		if (ball.m_castSound != null)
+			AudioSource.PlayClipAtPoint(ball.m_castSound, Vector3.zero);
 	}
 
 

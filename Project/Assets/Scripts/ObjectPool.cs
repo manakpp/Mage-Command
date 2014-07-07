@@ -4,13 +4,38 @@ using System.Collections.Generic;
 
 public sealed class ObjectPool : MonoBehaviour
 {
-	static ObjectPool s_instance;
+
+// Member Properties
+
+	public static ObjectPool Instance
+	{
+		get
+		{
+			if (s_instance != null)
+				return s_instance;
+
+			var obj = new GameObject("_ObjectPool");
+			obj.transform.localPosition = Vector3.zero;
+			s_instance = obj.AddComponent<ObjectPool>();
+
+			s_instance.m_activeGameobjectsParent = new GameObject("_ActivePooledObjects");
+			s_instance.m_activeGameobjectsParent.transform.localPosition = Vector3.zero;
+
+			return s_instance;
+		}
+	}
+
+
+// Member Fields
 
 	Dictionary<GameObject, List<GameObject>> m_objectLookup = new Dictionary<GameObject, List<GameObject>>();
 	Dictionary<GameObject, GameObject> m_prefabLookup = new Dictionary<GameObject, GameObject>();
 	List<GameObject> m_toBeRemoved = new List<GameObject>();
-
 	GameObject m_activeGameobjectsParent;
+	static ObjectPool s_instance;
+
+
+// Member Methods
 	
 	public static void Clear()
 	{
@@ -156,23 +181,5 @@ public sealed class ObjectPool : MonoBehaviour
 			return Instance.m_objectLookup[_prefab].Count;
 		else
 			return 0;
-	}
-
-	public static ObjectPool Instance
-	{
-		get
-		{
-			if (s_instance != null)
-				return s_instance;
-
-			var obj = new GameObject("_ObjectPool");
-			obj.transform.localPosition = Vector3.zero;
-			s_instance = obj.AddComponent<ObjectPool>();
-
-			s_instance.m_activeGameobjectsParent = new GameObject("_ActivePooledObjects");
-			s_instance.m_activeGameobjectsParent.transform.localPosition = Vector3.zero;
-
-			return s_instance;
-		}
 	}
 }

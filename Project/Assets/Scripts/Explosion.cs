@@ -24,6 +24,7 @@ public class Explosion : MonoBehaviour
 	// Member Fields
 	
 	public ParticleSystem m_particles;
+	public AudioClip m_audio;
 
 	private float m_lifeSpan = 1.0f;
 	private float m_timeElapsed = 0.0f;
@@ -35,6 +36,7 @@ public class Explosion : MonoBehaviour
 	{
 		m_timeElapsed = m_lifeSpan;
 		m_particles.Play(true);
+		AudioSource.PlayClipAtPoint(m_audio, transform.position);
 	}
 
 

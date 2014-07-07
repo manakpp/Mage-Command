@@ -19,6 +19,7 @@ public class Projectile : MonoBehaviour
 	public Projectile m_projectile;
 	public Explosion m_explosionPrefab;
 	public ParticleTrail m_particleTrailPrefab;
+	public AudioClip m_castSound;
 
 	protected Vector3 m_velocity;
 	protected Vector3 m_direction;
