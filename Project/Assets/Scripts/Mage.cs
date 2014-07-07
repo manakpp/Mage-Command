@@ -132,10 +132,10 @@ public class Mage : MonoBehaviour
 	public void OnTap(Vector3 _destination)
 	{
 		// Check for enough Mana
-		if (Mana > 0) // TODO: Check for enough Mana to cast this spell
+		if (Mana >= 1.0f) // TODO: Check for enough Mana to cast this spell
 		{
 			CastFireBall(_destination);
-			Mana -= 1;
+			Mana -= 1.0f;
 		}
 		else
 		{
