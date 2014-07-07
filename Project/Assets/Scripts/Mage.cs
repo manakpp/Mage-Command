@@ -94,7 +94,6 @@ public class Mage : MonoBehaviour
 	void Start()
 	{
 		// Listen to player input
-		GetComponent<MageController>().EventOnTap += OnTap;
 		Game.Instance.EventRestart += OnRestart;
 
 		Initialise();
@@ -117,7 +116,6 @@ public class Mage : MonoBehaviour
 
 	void OnDestroy()
 	{
-		GetComponent<MageController>().EventOnTap -= OnTap;
 		Game.Instance.EventRestart -= OnRestart;
 	}
 
@@ -131,7 +129,7 @@ public class Mage : MonoBehaviour
 	}
 
 
-	void OnTap(MageController _sender, Vector3 _destination)
+	public void OnTap(Vector3 _destination)
 	{
 		// Check for enough Mana
 		if (Mana > 0) // TODO: Check for enough Mana to cast this spell
@@ -144,6 +142,36 @@ public class Mage : MonoBehaviour
 			if (EventNotEnoughMana != null)
 				EventNotEnoughMana.Invoke(this);
 		}
+	}
+
+
+	public void OnTapAndHold(Vector3 _destination)
+	{
+
+	}
+
+
+	public void OnSwipeLeft(Vector3 _start, Vector3 _end, float _velocity)
+	{
+
+	}
+
+
+	public void OnSwipeRight(Vector3 _start, Vector3 _end, float _velocity)
+	{
+
+	}
+
+
+	public void OnSwipeUp(Vector3 _start, Vector3 _end, float _velocity)
+	{
+
+	}
+
+
+	public void OnSwipeDown(Vector3 _start, Vector3 _end, float _velocity)
+	{
+
 	}
 
 
