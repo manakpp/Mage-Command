@@ -53,7 +53,7 @@ public class Explosion : MonoBehaviour
 		{
 			m_particles.Clear(true);
 			m_particles.Stop(true);
-			this.Recycle();
+			ObjectPool.Recycle(gameObject);
 		}
 	}
 

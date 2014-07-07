@@ -85,9 +85,9 @@ public class Mage : MonoBehaviour
 	void Awake()
 	{
 		// Create a bunch of projectiles
-		ObjectPool.CreatePool(m_projectilePrefab, k_maxProjectiles);
-		ObjectPool.CreatePool(m_projectilePrefab.m_explosionPrefab, k_maxProjectiles);
-		ObjectPool.CreatePool(m_projectilePrefab.m_particleTrailPrefab, k_maxProjectiles + 10);
+		ObjectPool.CreatePool(m_projectilePrefab.gameObject, k_maxProjectiles);
+		ObjectPool.CreatePool(m_projectilePrefab.m_explosionPrefab.gameObject, k_maxProjectiles);
+		ObjectPool.CreatePool(m_projectilePrefab.m_particleTrailPrefab.gameObject, k_maxProjectiles + 10);
 	}
 
 
@@ -151,12 +151,12 @@ public class Mage : MonoBehaviour
 	{
 		Vector3 startPosition = transform.position + (_destination - transform.position).normalized;
 
-		var newProjectile = m_projectilePrefab.Spawn(startPosition);
+		var newProjectile = ObjectPool.Spawn(m_projectilePrefab.gameObject, startPosition);
 
 		if (newProjectile == null)
 			return;
 
-		newProjectile.Shoot(startPosition, _destination);
+		newProjectile.GetComponent<FireBall>().Shoot(startPosition, _destination);
 	}
 
 

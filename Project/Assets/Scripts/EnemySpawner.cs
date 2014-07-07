@@ -59,11 +59,11 @@ public class EnemySpawner : MonoBehaviour
 
 	void Start()
 	{
-        ObjectPool.CreatePool(m_skeletonGrunt.GetComponent<EnemyGruntBehaviour>(), k_maxGrunts);
-        ObjectPool.CreatePool(m_skeletonArcher.GetComponent<EnemyArcherBehaviour>(), k_maxArchers);
-        ObjectPool.CreatePool(m_skeletonWarrior.GetComponent<EnemyWarriorBehaviour>(), k_maxWarriors);
-        ObjectPool.CreatePool(m_skeletonCaster.GetComponent<EnemyCasterBehaviour>(), k_maxCasters);
-        ObjectPool.CreatePool(m_skeletonBoss.GetComponent<EnemyBossBehaviour>(), k_maxBosses);
+        ObjectPool.CreatePool(m_skeletonGrunt, k_maxGrunts);
+        ObjectPool.CreatePool(m_skeletonArcher, k_maxArchers);
+        ObjectPool.CreatePool(m_skeletonWarrior, k_maxWarriors);
+        ObjectPool.CreatePool(m_skeletonCaster, k_maxCasters);
+        ObjectPool.CreatePool(m_skeletonBoss, k_maxBosses);
 
 		RandomiseTimer();
 
@@ -107,32 +107,38 @@ public class EnemySpawner : MonoBehaviour
 		startPosition.x = Random.Range(position.x - extents.x / 2.0f, position.x + extents.x / 2.0f);
 		startPosition.z = Random.Range(position.z - extents.z / 2.0f, position.z + extents.z / 2.0f);
 
+		//var enemy = ObjectPool.Spawn(m_enemyPrefab.gameObject, startPosition);
 
         int enemyType = Random.Range(0, (int)EEnemyType.MAX);
+        enemyType = (int)EEnemyType.Archer;
 
         GameObject enemy = null;
 
-        /*
-        switch ()
+        switch ((EEnemyType)enemyType)
         {
-            case Grunt:
-                m_enemyPrefab.Spawn(startPosition);
+            case EEnemyType.Grunt:
+                enemy = ObjectPool.Spawn(m_skeletonGrunt, startPosition);
                 break;
 
-            case Archer:
+            case EEnemyType.Archer:
+                enemy = ObjectPool.Spawn(m_skeletonArcher, startPosition);
                 break;
 
-            case Warrior:
+            case EEnemyType.Warrior:
+                enemy = ObjectPool.Spawn(m_skeletonWarrior, startPosition);
                 break;
 
-            case Caster:
+            case EEnemyType.Caster:
+                enemy = ObjectPool.Spawn(m_skeletonCaster, startPosition);
                 break;
 
-            case Boss:
+            case EEnemyType.Boss:
+                enemy = ObjectPool.Spawn(m_skeletonBoss, startPosition);
                 break;
         }
 
-        
+
+        /* 
 		var enemy = 
 
 		if (enemy != null)
@@ -142,7 +148,7 @@ public class EnemySpawner : MonoBehaviour
 
 			enemy.gameObject.SetActive(true);
 
-			enemy.Spawn();
+			enemy.GetComponent<EnemyBehaviour>().Spawn();
 		}
          * */
 

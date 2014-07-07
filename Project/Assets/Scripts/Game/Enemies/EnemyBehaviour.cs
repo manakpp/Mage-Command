@@ -53,7 +53,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
             if (m_deathTimer < 0.0f)
             {
-                this.Recycle();
+                ObjectPool.Recycle(gameObject);
             }
 
             return;
