@@ -43,6 +43,7 @@ public sealed class ObjectPool : MonoBehaviour
 		Instance.m_prefabLookup.Clear();
 	}
 
+
 	public static void Restart()
 	{
 		foreach (var keyPair in Instance.m_prefabLookup)
@@ -65,6 +66,7 @@ public sealed class ObjectPool : MonoBehaviour
 		Instance.m_toBeRemoved.Clear();
 	}
 
+
 	public static void CreatePool(GameObject _prefab, int _startBuffer = 1)
 	{
 		// If it doesn't exist then create it
@@ -83,6 +85,7 @@ public sealed class ObjectPool : MonoBehaviour
 			}
 		}
 	}
+
 
 	public static GameObject Spawn(GameObject _prefab, Vector3 position, Quaternion rotation, bool _mustBeFromPool = true)
 	{
@@ -126,11 +129,13 @@ public sealed class ObjectPool : MonoBehaviour
 			return newGameObject;
 		}
 		
+
 		// This GameObject does not belong to a prefab key. If it must be in a pool then return now
 		if (_mustBeFromPool)
 		{
 			return null;
 		}
+
 
 		// Else create it in a global space.
 		newGameObject = Instantiate(_prefab.gameObject, position, rotation) as GameObject;
@@ -138,15 +143,18 @@ public sealed class ObjectPool : MonoBehaviour
 		return newGameObject;
 	}
 
+
 	public static GameObject Spawn(GameObject _prefab, Vector3 _position, bool _mustBeFromPool = true)
 	{
         return Spawn(_prefab, _position, _prefab.transform.rotation, _mustBeFromPool);
 	}
 
+
 	public static GameObject Spawn(GameObject _prefab, bool _mustBeFromPool = true)
 	{
         return Spawn(_prefab, Vector3.zero, _prefab.transform.rotation, _mustBeFromPool);
 	}
+
 
 	public static void Recycle(GameObject _object)
 	{
@@ -170,10 +178,12 @@ public sealed class ObjectPool : MonoBehaviour
 		}
 	}
 
+
 	public static void EnterActiveGroup(GameObject _obj)
 	{
 		_obj.transform.parent = Instance.m_activeGameobjectsParent.transform;
 	}
+
 
 	public static int Count(GameObject _prefab)
 	{
