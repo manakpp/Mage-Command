@@ -21,6 +21,9 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Properties
 
 
+    public abstract float MovementSpeed { get; set; }
+
+
 // Member Fields
 
 
@@ -42,6 +45,28 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	}
 
 
+    protected void Update()
+    {
+        if (m_deathTimer > 0.0f)
+        {
+            m_deathTimer -= Time.deltaTime;
+
+            if (m_deathTimer < 0.0f)
+            {
+                this.Recycle();
+            }
+
+            return;
+        }
+
+        //if (!m_hasReachedTarget)
+         //   transform.position += transform.forward * 10.0f * Time.deltaTime;
+
+
+        UpdateMovement();
+    }
+
+
 	void Start()
 	{
 		gameObject.SetActive(false);
@@ -55,23 +80,10 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	}
 
 
-	void Update()
-	{
-		if (m_deathTimer > 0.0f)
-		{
-			m_deathTimer -= Time.deltaTime;
-
-			if (m_deathTimer < 0.0f)
-			{
-				this.Recycle();
-			}
-
-			return;
-		}
-
-		if(!m_hasReachedTarget)
-			transform.position += transform.forward * 10.0f * Time.deltaTime;
-	}
+    void UpdateMovement()
+    {
+        transform.position += Vector3.left * MovementSpeed * Time.deltaTime;
+    }
 
 
 	void OnCollisionEnter(Collision _collision)

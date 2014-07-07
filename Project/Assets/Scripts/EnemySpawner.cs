@@ -12,33 +12,58 @@ using System.Collections.Generic;
 public class EnemySpawner : MonoBehaviour
 {
 
-	// Member Types
+// Member Types
 
 
-	// Member Delegates & Events
+    public enum EEnemyType
+    {
+        INVALID     = -1,
+        Grunt,
+        Archer,
+        Warrior,
+        Caster,
+        Boss,
+        MAX
+    }
 
 
-	// Member Properties
+// Member Delegates & Events
 
 
-	// Member Fields
-
-	public EnemyBehaviour m_enemyPrefab;
-
-	const int k_maxEnemies = 20;
-
-	float m_spawnTimer;
-	float m_spawnTimerMax = 3.0f;
-	float m_spawnTimerMin = 1.5f;
+// Member Properties
 
 
-	// Member Methods
+// Member Fields
+
+
+    const int k_maxGrunts   = 20;
+    const int k_maxArchers  = 10;
+    const int k_maxWarriors = 10;
+    const int k_maxCasters  = 10;
+    const int k_maxBosses   = 4;
+
+
+    public GameObject m_skeletonGrunt   = null;
+    public GameObject m_skeletonArcher  = null;
+    public GameObject m_skeletonWarrior = null;
+    public GameObject m_skeletonCaster  = null;
+    public GameObject m_skeletonBoss    = null;
+
+	float m_spawnTimer              = 0.0f;
+	float m_spawnTimerMax           = 3.0f;
+	float m_spawnTimerMin           = 1.5f;
+
+
+// Member Methods
 
 
 	void Start()
 	{
-		// Create a bunch of Explosions
-		ObjectPool.CreatePool(m_enemyPrefab, k_maxEnemies);
+        ObjectPool.CreatePool(m_skeletonGrunt.GetComponent<EnemyGruntBehaviour>(), k_maxGrunts);
+        ObjectPool.CreatePool(m_skeletonArcher.GetComponent<EnemyArcherBehaviour>(), k_maxArchers);
+        ObjectPool.CreatePool(m_skeletonWarrior.GetComponent<EnemyWarriorBehaviour>(), k_maxWarriors);
+        ObjectPool.CreatePool(m_skeletonCaster.GetComponent<EnemyCasterBehaviour>(), k_maxCasters);
+        ObjectPool.CreatePool(m_skeletonBoss.GetComponent<EnemyBossBehaviour>(), k_maxBosses);
 
 		RandomiseTimer();
 
@@ -82,7 +107,33 @@ public class EnemySpawner : MonoBehaviour
 		startPosition.x = Random.Range(position.x - extents.x / 2.0f, position.x + extents.x / 2.0f);
 		startPosition.z = Random.Range(position.z - extents.z / 2.0f, position.z + extents.z / 2.0f);
 
-		var enemy = m_enemyPrefab.Spawn(startPosition);
+
+        int enemyType = Random.Range(0, (int)EEnemyType.MAX);
+
+        GameObject enemy = null;
+
+        /*
+        switch ()
+        {
+            case Grunt:
+                m_enemyPrefab.Spawn(startPosition);
+                break;
+
+            case Archer:
+                break;
+
+            case Warrior:
+                break;
+
+            case Caster:
+                break;
+
+            case Boss:
+                break;
+        }
+
+        
+		var enemy = 
 
 		if (enemy != null)
 		{
@@ -93,6 +144,7 @@ public class EnemySpawner : MonoBehaviour
 
 			enemy.Spawn();
 		}
+         * */
 
 		RandomiseTimer();
 	}
@@ -100,7 +152,8 @@ public class EnemySpawner : MonoBehaviour
 
 	void RandomiseTimer()
 	{
-		m_spawnTimer = Random.Range(m_spawnTimerMin, m_spawnTimerMax);
+		//m_spawnTimer = Random.Range(m_spawnTimerMin, m_spawnTimerMax);
 	}
+
 
 };

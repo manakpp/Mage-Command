@@ -21,10 +21,19 @@ public class EnemyArcherBehaviour : EnemyBehaviour
 // Member Properties
 
 
+    public override float MovementSpeed { get; set; }
+
+
 // Member Fields
 	
 
 // Member Methods
+
+
+    void Awake()
+    {
+        MovementSpeed = 4;
+    }
 
 
 	void Start()
@@ -41,7 +50,7 @@ public class EnemyArcherBehaviour : EnemyBehaviour
 
 	void Update()
 	{
-		// Empty
+        base.Update();
 	}
 
 
