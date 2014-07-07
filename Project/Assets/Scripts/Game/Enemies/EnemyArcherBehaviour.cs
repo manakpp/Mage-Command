@@ -27,22 +27,6 @@ public class EnemyArcherBehaviour : EnemyBehaviour
 // Member Methods
 
 
-	void Start()
-	{
-		// Empty
-	}
-
-
-	void OnDestroy()
-	{
-		// Empty
-	}
-
-
-	void Update()
-	{
-		// Empty
-	}
 
 
 };
