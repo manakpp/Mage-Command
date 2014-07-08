@@ -57,7 +57,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
     protected void Awake()
     {
-        
+        // Empty
     }
 
 
