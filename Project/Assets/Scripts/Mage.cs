@@ -151,6 +151,12 @@ public class Mage : MonoBehaviour
 	}
 
 
+	public void OnTapAndHoldEnded(Vector3 _destination)
+	{
+
+	}
+
+
 	public void OnSwipeLeft(Vector3 _start, Vector3 _end, float _velocity)
 	{
 

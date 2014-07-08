@@ -20,13 +20,15 @@ public class Projectile : MonoBehaviour
 	public Explosion m_explosionPrefab;
 	public ParticleTrail m_particleTrailPrefab;
 	public AudioClip m_castSound;
+	public AnimationCurve m_positionCurveX;
+	public AnimationCurve m_positionCurveY;
+	public AnimationCurve m_positionCurveZ;
 
-	protected Vector3 m_velocity;
-	protected Vector3 m_direction;
 	protected ParticleTrail m_trail;
 	protected float m_speed = 10.0f;
-	protected bool m_initialised;
-
+	protected float m_timeAccum;
+	protected Vector3 m_target;
+	protected Vector3 m_start;
 
 // Member Methods
 
@@ -34,10 +36,14 @@ public class Projectile : MonoBehaviour
 	public void Shoot(Vector3 _start, Vector3 _destination)
 	{
 		transform.position = _start;
-		m_direction = (_destination - _start).normalized;
+		m_target = _destination;
+		m_target.y += 1.0f;
+		m_start = _start;
 
 		m_trail = ObjectPool.Spawn(m_particleTrailPrefab.gameObject, _start).GetComponent<ParticleTrail>();
 		m_trail.Initialise(transform, 0.5f);
+
+		m_timeAccum = 0.0f;
 	}
 
 	public void Explode(Vector3 _position)
@@ -66,21 +72,30 @@ public class Projectile : MonoBehaviour
 	}
 
 
-	void OnDestroy()
-	{
-		// Empty
-	}
-
-
 	void Update()
 	{
-		transform.position += m_direction * m_speed * Time.deltaTime;
-	}
+		m_timeAccum += Time.deltaTime;
+		if (m_timeAccum > 1.0f)
+		{
+			m_timeAccum = 1.0f;
+		}
 
+		Vector3 direction = (m_target - m_start);
 
-	void OnCollisionEnter(Collision _collision)
-	{
-		if(gameObject.activeSelf)
+		Vector3 position = m_start + (direction * m_timeAccum);
+
+		if (m_positionCurveX != null)
+			position.x = m_start.x + (direction.x * m_positionCurveX.Evaluate(m_timeAccum));
+
+		if (m_positionCurveY != null)
+			position.y = m_start.y + (direction.y * m_positionCurveY.Evaluate(m_timeAccum));
+
+		if (m_positionCurveZ != null)
+			position.z = m_start.z + (direction.z * m_positionCurveZ.Evaluate(m_timeAccum));
+
+		transform.position = position;
+
+		if (m_timeAccum == 1.0f)
 			Explode(transform.position);
 	}
 };
