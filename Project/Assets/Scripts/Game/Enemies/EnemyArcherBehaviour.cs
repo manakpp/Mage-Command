@@ -30,7 +30,7 @@ public class EnemyArcherBehaviour : EnemyBehaviour
 // Member Methods
 
 
-    void Awake()
+	protected override void Awake()
     {
         base.Awake();
 
@@ -38,19 +38,19 @@ public class EnemyArcherBehaviour : EnemyBehaviour
     }
 
 
-	void Start()
+	protected override void Start()
 	{
         base.Start();
 	}
 
 
-	void OnDestroy()
+	protected override void OnDestroy()
 	{
         base.OnDestroy();
 	}
 
 
-	void Update()
+	protected override void Update()
 	{
         base.Update();
 	}

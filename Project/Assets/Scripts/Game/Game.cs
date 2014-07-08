@@ -55,9 +55,10 @@ public class Game : MonoBehaviour
 		get { return m_mage; }
 	}
 
-	public MageController Controller
+	public GameController Controller
 	{
-		get { return m_mage.GetComponent<MageController>(); }
+		get;
+		set;
 	}
 
 	public static Game Instance
@@ -165,6 +166,8 @@ public class Game : MonoBehaviour
 	void Awake()
 	{
 		s_instance = this;
+
+		Controller = GetComponent<GameController>();
 	}
 
 

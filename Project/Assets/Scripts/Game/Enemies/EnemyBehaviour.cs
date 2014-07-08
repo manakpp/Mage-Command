@@ -30,7 +30,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	private float m_deathTimer;
 	private bool m_isDead;
 	private bool m_initialised;
-	private bool m_hasReachedTarget;
 
 
 // Member Methods
@@ -41,24 +40,23 @@ public abstract class EnemyBehaviour : MonoBehaviour
 		m_isDead = false;
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = Vector3.zero;
-		m_hasReachedTarget = false;
 	}
 
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         
     }
 
 
-    protected void Start()
+	protected virtual void Start()
     {
         gameObject.SetActive(false);
         m_initialised = true;
     }
 
 
-    protected void Update()
+	protected virtual void Update()
     {
         if (m_deathTimer > 0.0f)
         {
@@ -80,7 +78,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     }
 
 
-    protected void OnDestroy()
+	protected virtual void OnDestroy()
 	{
 		// Empty
 	}
@@ -118,7 +116,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
 	void OnTriggerEnter(Collider _col)
 	{
-		m_hasReachedTarget = true;
 		transform.LookAt(transform.position + Vector3.forward);
 
 		Game.Instance.Mage.Health -= 1;
