@@ -183,7 +183,7 @@ public class Mage : MonoBehaviour
 
 	void CastFireBall(Vector3 _destination)
 	{
-		Vector3 startPosition = transform.position + (_destination - transform.position).normalized;
+		Vector3 startPosition = transform.position + transform.forward + Vector3.up;
 
 		var newProjectile = ObjectPool.Spawn(m_projectilePrefab.gameObject, startPosition);
 
@@ -191,6 +191,7 @@ public class Mage : MonoBehaviour
 			return;
 
 		var ball = newProjectile.GetComponent<FireBall>();
+		_destination.y += 0.5f;
 		ball.Shoot(startPosition, _destination);
 
 		if (ball.m_castSound != null)
