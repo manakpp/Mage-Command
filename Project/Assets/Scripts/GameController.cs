@@ -11,29 +11,8 @@ using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
-	// Member Properties
 
-	public LayerMask m_touchLayerMask;
-
-
-	// Member Fields
-
-	Mage m_mage;
-	List<Tile> m_selectedTiles;
-
-	// Member Methods
-
-	void Awake()
-	{
-		m_selectedTiles = new List<Tile>();
-	}
-
-
-	void Start()
-	{
-		m_mage = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
-	}
-
+// Member Types
 
 	public enum GridTouchState
 	{
@@ -46,6 +25,7 @@ public class GameController : MonoBehaviour
 		Ended,		// Touch was released
 	}
 
+
 	public enum GridSwipeDirection
 	{
 		None,
@@ -55,13 +35,37 @@ public class GameController : MonoBehaviour
 		Down,
 	}
 
-	float m_touchTimeAccum;
-	float m_timeForHold = 0.25f;
-	GridTouchState m_touchState;
-	GridSwipeDirection m_swipeDirection;
+
+// Member Fields
+
+	public LayerMask m_touchLayerMask;
+
+	List<Tile> m_selectedTiles;
 	Vector2 m_startPosition;
 	Vector2 m_tapAndHoldMotionThreshold = new Vector2(5.0f, 5.0f);
 	Vector2 m_posDeltaLastFrame;
+	Mage m_mage;
+	Tile m_potentialHoldTile;
+	GridTouchState m_touchState;
+	GridSwipeDirection m_swipeDirection;
+	float m_touchTimeAccum;
+	float m_timeForHold = 0.25f;
+	
+
+// Member Methods
+
+	void Awake()
+	{
+		m_selectedTiles = new List<Tile>();
+	}
+
+
+	void Start()
+	{
+		m_mage = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
+	}
+
+	
 	void Update()
 	{
 		Vector2 touchPosition = Input.mousePosition;
@@ -69,14 +73,12 @@ public class GameController : MonoBehaviour
 		// Check for pressed
 		if (Input.GetMouseButtonDown(0))
 		{
-			// Need to 
 			if (m_touchState == GridTouchState.None || m_touchState == GridTouchState.Ended)
 			{
 				m_touchTimeAccum = 0.0f;
 				m_touchState = GridTouchState.Began;
 				m_startPosition = Input.mousePosition;
-
-				
+				OnTapBegan(touchPosition);
 			}
 		}
 
@@ -86,15 +88,20 @@ public class GameController : MonoBehaviour
 			if (m_touchState == GridTouchState.Began ||
 				m_touchState == GridTouchState.Pressed)
 			{
-				// Touch time is accumulated to check for Hold
-				m_touchTimeAccum += Time.deltaTime;
-				if (m_touchTimeAccum > m_timeForHold)
+				if (m_potentialHoldTile != null)
 				{
-					OnHold(touchPosition);
-					m_touchTimeAccum = m_timeForHold;
-					m_touchState = GridTouchState.Held;
-				}
+					// Touch time is accumulated to check for Hold
+					m_touchTimeAccum += Time.deltaTime;
+					if (m_touchTimeAccum > m_timeForHold)
+					{
+						OnHold(touchPosition);
+						m_touchTimeAccum = m_timeForHold;
+						m_touchState = GridTouchState.Held;
+					}
 
+					if (m_touchTimeAccum == m_timeForHold)
+						return;
+				}
 				
 				// Check for motion (for swipes)
 				Vector2 posDelta = m_startPosition - touchPosition;
@@ -164,6 +171,7 @@ public class GameController : MonoBehaviour
 
 			m_swipeDirection = GridSwipeDirection.None;
 			m_touchState = GridTouchState.Ended;
+			DeselectAllTiles();
 		}
 		else
 		{
@@ -201,6 +209,13 @@ public class GameController : MonoBehaviour
 			Vector3 tilePosB = m_selectedTiles[1].transform.position;
 			Vector3 direction = tilePosB - tilePosA;
 
+			// Make sure there is no diagonalls
+			if (direction.x != 0.0f && direction.z != 0.0f)
+			{
+				DeSelectTile(tile);
+				return;
+			}
+
 			if (direction.x < 0.0f)
 				m_swipeDirection = GridSwipeDirection.Left;
 			else if (direction.x > 0.0f)
@@ -212,6 +227,15 @@ public class GameController : MonoBehaviour
 			else
 				Debug.Log("WHAT HAPPEN!? " + direction);
 		}
+
+		//int count = m_selectedTiles.Count;
+		//for (int i = 0; i < count; ++i)
+		//{
+		//    if (i + 1 < count)
+		//    {
+		//        Debug.DrawLine(m_selectedTiles[i].transform.position, m_selectedTiles[i + 1].transform.position, Color.white, 3.0f); 
+		//    }
+		//}
 	}
 
 	void OnTouchMove(Vector2 _touchPostion)
@@ -251,6 +275,15 @@ public class GameController : MonoBehaviour
 	}
 
 
+	void OnTapBegan(Vector2 _touchPostion)
+	{
+		var tile = CheckForTile(_touchPostion);
+		if (tile == null)
+			return;
+
+		m_potentialHoldTile = tile;
+	}
+
 	void OnTap(Vector2 _touchPostion)
 	{
 		var tile = CheckForTile(_touchPostion);
@@ -264,13 +297,22 @@ public class GameController : MonoBehaviour
 
 	void OnHold(Vector2 _touchPostion)
 	{
+		if (m_potentialHoldTile == null)
+			return;
+
 		var tile = CheckForTile(_touchPostion);
 		if (tile == null)
 			return;
 
-		HoldTile(tile);
+		if (m_potentialHoldTile != tile)
+		{
+			m_potentialHoldTile = null;
+			return;
+		}
 
+		HoldTile(tile);
 		m_mage.OnTapAndHold(tile.transform.position);
+		m_potentialHoldTile = null;
 	}
 
 	void OnSwipe(Vector2 _touchPostion)
