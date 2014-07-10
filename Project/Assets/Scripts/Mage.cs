@@ -67,6 +67,12 @@ public class Mage : MonoBehaviour
 	}
 
 
+	public SpellBook SpellBook
+	{
+		get { return m_spellBook; }
+	}
+
+
 	// Member Fields
 
 	public Projectile m_projectilePrefab;
@@ -74,7 +80,8 @@ public class Mage : MonoBehaviour
 	public float m_maxMana = 20.0f;
 	public float m_manaRegenPerSecond = 5.0f;
 	public const int k_maxProjectiles = 20;
-	
+
+	SpellBook m_spellBook;
 	int m_health;
 	float m_mana;
 
@@ -84,10 +91,7 @@ public class Mage : MonoBehaviour
 
 	void Awake()
 	{
-		// Create a bunch of projectiles
-		ObjectPool.CreatePool(m_projectilePrefab.gameObject, k_maxProjectiles);
-		ObjectPool.CreatePool(m_projectilePrefab.m_explosionPrefab.gameObject, k_maxProjectiles);
-		ObjectPool.CreatePool(m_projectilePrefab.m_particleTrailPrefab.gameObject, k_maxProjectiles + 10);
+		m_spellBook = GetComponent<SpellBook>();
 	}
 
 
@@ -95,8 +99,6 @@ public class Mage : MonoBehaviour
 	{
 		// Listen to player input
 		Game.Instance.EventRestart += OnRestart;
-
-		Initialise();
 	}
 
 
@@ -105,6 +107,8 @@ public class Mage : MonoBehaviour
 		// Set up stats
 		Health = m_maxHealth;
 		Mana = m_maxMana;
+
+		m_spellBook.LoadSpells();
 	}
 
 
@@ -129,55 +133,123 @@ public class Mage : MonoBehaviour
 	}
 
 
-	public void OnTap(Vector3 _destination)
+	void CastSpell(Spell _spell, Tile[] _targetTiles, SpellBook.SpellInputBinding _binding, float _swipeVelocity = 0.0f)
 	{
-		// Check for enough Mana
-		if (Mana >= 1.0f) // TODO: Check for enough Mana to cast this spell
+		if (_spell == null || _targetTiles == null)
+			return;
+
+		if (CheckAndRemoveMana(_spell))
 		{
-			CastFireBall(_destination);
-			Mana -= 1.0f;
+			switch (_binding)
+			{
+				case SpellBook.SpellInputBinding.SwipeLeft:
+					_spell.SwipeLeftCast(this, _targetTiles, _swipeVelocity);
+					break;
+				case SpellBook.SpellInputBinding.SwipeRight:
+					_spell.SwipeRightCast(this, _targetTiles, _swipeVelocity);
+					break;
+				case SpellBook.SpellInputBinding.SwipeUp:
+					_spell.SwipeUpCast(this, _targetTiles, _swipeVelocity);
+					break;
+				case SpellBook.SpellInputBinding.SwipeDown:
+					_spell.SwipeDownCast(this, _targetTiles, _swipeVelocity);
+					break;
+				default:
+					break;
+			}
 		}
-		else
+	}
+
+
+	void CastSpell(Spell _spell, Tile _targetTile, SpellBook.SpellInputBinding _binding)
+	{
+		if (_spell == null || _targetTile == null)
+			return;
+
+		if (CheckAndRemoveMana(_spell))
 		{
-			if (EventNotEnoughMana != null)
-				EventNotEnoughMana.Invoke(this);
+			switch (_binding)
+			{
+				case SpellBook.SpellInputBinding.Tap:
+					_spell.TapCast(this, _targetTile);
+					break;
+				case SpellBook.SpellInputBinding.Hold:
+					_spell.HoldCast(this, _targetTile);
+					break;
+				case SpellBook.SpellInputBinding.HoldRelease:
+					_spell.HoldReleaseCast(this, _targetTile);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
 
-	public void OnTapAndHold(Vector3 _destination)
+	bool CheckAndRemoveMana(Spell _spell)
 	{
+		if (Mana >= _spell.m_baseManaCost) // TODO: Check for enough Mana to cast this spell
+		{
+			Mana -= _spell.m_baseManaCost;
+			return true;
+		}
+		
+		if (EventNotEnoughMana != null)
+			EventNotEnoughMana.Invoke(this);
 
+		return false;
 	}
 
 
-	public void OnTapAndHoldEnded(Vector3 _destination)
+	public void OnTap(Tile _targetTile)
 	{
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.Tap);
 
+		CastSpell(spell, _targetTile, SpellBook.SpellInputBinding.Tap);
 	}
 
 
-	public void OnSwipeLeft(Vector3 _start, Vector3 _end, float _velocity)
+	public void OnHold(Tile _targetTile)
 	{
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.Hold);
 
+		CastSpell(spell, _targetTile, SpellBook.SpellInputBinding.Hold);
 	}
 
 
-	public void OnSwipeRight(Vector3 _start, Vector3 _end, float _velocity)
+	public void OnHoldEnded(Tile _targetTile)
 	{
-
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.HoldRelease);
+		
+		CastSpell(spell, _targetTile, SpellBook.SpellInputBinding.HoldRelease);
 	}
 
 
-	public void OnSwipeUp(Vector3 _start, Vector3 _end, float _velocity)
+	public void OnSwipeLeft(Tile[] _targetTiles, float _swipeVelocity)
 	{
-
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.SwipeLeft);
+		CastSpell(spell, _targetTiles, SpellBook.SpellInputBinding.SwipeLeft, _swipeVelocity);
 	}
 
 
-	public void OnSwipeDown(Vector3 _start, Vector3 _end, float _velocity)
+	public void OnSwipeRight(Tile[] _targetTiles, float _swipeVelocity)
 	{
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.SwipeRight);
+		CastSpell(spell, _targetTiles, SpellBook.SpellInputBinding.SwipeRight, _swipeVelocity);
+	}
 
+
+	public void OnSwipeUp(Tile[] _targetTiles, float _swipeVelocity)
+	{
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.SwipeUp);
+		CastSpell(spell, _targetTiles, SpellBook.SpellInputBinding.SwipeUp, _swipeVelocity);
+	}
+
+
+	public void OnSwipeDown(Tile[] _targetTiles, float _swipeVelocity)
+	{
+		var spell = SpellBook.GetSpellBindedTo(SpellBook.SpellInputBinding.SwipeDown);
+		CastSpell(spell, _targetTiles, SpellBook.SpellInputBinding.SwipeDown, _swipeVelocity);
 	}
 
 
@@ -190,7 +262,7 @@ public class Mage : MonoBehaviour
 		if (newProjectile == null)
 			return;
 
-		var ball = newProjectile.GetComponent<FireBall>();
+		var ball = newProjectile.GetComponent<FireBallProjectile>();
 		_destination.y += 0.5f;
 		ball.Shoot(startPosition, _destination);
 

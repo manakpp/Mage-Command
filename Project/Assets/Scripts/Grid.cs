@@ -29,6 +29,7 @@ public class Grid : MonoBehaviour
 
 	void Start()
 	{
+		// TODO: Instantiate the grid and link the tiles
 		// Empty
 	}
 

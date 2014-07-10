@@ -36,6 +36,14 @@ public class GameController : MonoBehaviour
 	}
 
 
+// Member Properties
+
+	public GridSwipeDirection SwipeDirection
+	{
+		get { return m_swipeDirection; }
+	}
+
+
 // Member Fields
 
 	public LayerMask m_touchLayerMask;
@@ -292,7 +300,7 @@ public class GameController : MonoBehaviour
 
 		TapTile(tile);
 
-		m_mage.OnTap(tile.transform.position);
+		m_mage.OnTap(tile);
 	}
 
 	void OnHold(Vector2 _touchPostion)
@@ -311,13 +319,17 @@ public class GameController : MonoBehaviour
 		}
 
 		HoldTile(tile);
-		m_mage.OnTapAndHold(tile.transform.position);
+		m_mage.OnHold(tile);
 		m_potentialHoldTile = null;
 	}
 
-	void OnSwipe(Vector2 _touchPostion)
+
+	void OnHoldRelease(Vector2 _touchPostion)
 	{
-		DeselectAllTiles();
+		if(m_selectedTiles.Count > 0)
+			m_mage.OnHoldEnded(m_selectedTiles[0]);
+
+		m_potentialHoldTile = null;
 	}
 
 
@@ -335,12 +347,35 @@ public class GameController : MonoBehaviour
 	}
 
 
-	void OnHoldRelease(Vector2 _touchPostion)
+	void OnSwipe(Vector2 _touchPostion)
 	{
+		float swipeSpeed = 0.0f;
+
+		Tile[] targetTiles = new Tile[m_selectedTiles.Count];
+		for (int i = 0; i < m_selectedTiles.Count; ++i)
+		{
+			targetTiles[i] = m_selectedTiles[i];
+		}
+
+		switch (m_swipeDirection)
+		{
+			case GridSwipeDirection.Left:
+				m_mage.OnSwipeLeft(targetTiles, swipeSpeed);
+				break;
+			case GridSwipeDirection.Right:
+				m_mage.OnSwipeRight(targetTiles, swipeSpeed);
+				break;
+			case GridSwipeDirection.Up:
+				m_mage.OnSwipeUp(targetTiles, swipeSpeed);
+				break;
+			case GridSwipeDirection.Down:
+				m_mage.OnSwipeDown(targetTiles, swipeSpeed);
+				break;
+			default:
+				break;
+		}
 
 		DeselectAllTiles();
-
-		//m_mage.OnTapAndHoldEnded(tile.transform.position);
 	}
 
 

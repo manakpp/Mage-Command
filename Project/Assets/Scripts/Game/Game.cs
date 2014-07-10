@@ -55,16 +55,19 @@ public class Game : MonoBehaviour
 		get { return m_mage; }
 	}
 
+
 	public GameController Controller
 	{
 		get;
 		set;
 	}
 
+
 	public static Game Instance
 	{
 		get { return s_instance; }
 	}
+
 
 	GameMenuBehaviour GameMenuBehaviour
 	{

@@ -90,27 +90,30 @@ public abstract class EnemyBehaviour : MonoBehaviour
     }
 
 
-	void OnCollisionEnter(Collision _collision)
-	{
-		if (!m_initialised)
-			return;
+	//void OnCollisionEnter(Collision _collision)
+	//{
+	//    if (!m_initialised)
+	//        return;
 
+	//    if (m_isDead)
+	//        return;
+
+	//    if(_collision.gameObject.layer == LayerMask.NameToLayer("Explosion"))
+	//    {
+	//        rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
+	//    }
+
+	//    Die();
+	//}
+
+
+	public void Die()
+	{
 		if (m_isDead)
 			return;
 
-		if(_collision.gameObject.layer == LayerMask.NameToLayer("Explosion"))
-		{
-			rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
-		}
-
-		Die();
-	}
-
-
-	void Die()
-	{
 		m_isDead = true;
-		m_deathTimer = 3.0f;
+		m_deathTimer = 0.5f;
 	}
 
 
