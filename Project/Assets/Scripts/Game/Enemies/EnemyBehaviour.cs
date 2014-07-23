@@ -35,7 +35,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Fields
 
 
-    EState m_currentState = EState.INVALID;
+    EState m_currentState = EState.MovingTowardsBarricade;
 
 	bool m_isDead;
 
@@ -55,19 +55,19 @@ public abstract class EnemyBehaviour : MonoBehaviour
     }
 
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         // Empty
     }
 
 
-    protected void Start()
+    protected virtual void Start()
     {
         gameObject.SetActive(false);
     }
 
 
-    protected void Update()
+    protected virtual void Update()
     {
         switch (m_currentState)
         {
@@ -87,7 +87,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     }
 
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
 	{
 		// Empty
 	}
@@ -120,7 +120,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
 	void OnTriggerEnter(Collider _otherCollider)
 	{
-
 		// Game.Instance.Mage.Health -= 1;
 	}
 
