@@ -15,14 +15,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Types
 
 
-    public enum EState
-    {
-        INVALID,
-        MovingTowardsBarricade,
-        AttackingBarricade,
-    }
-
-
 // Member Delegates & Events
 
 
@@ -35,9 +27,9 @@ public abstract class EnemyBehaviour : MonoBehaviour
 // Member Fields
 
 
-    EState m_currentState = EState.MovingTowardsBarricade;
-
-	bool m_isDead;
+	private float m_deathTimer;
+	private bool m_isDead;
+	private bool m_initialised;
 
 
 // Member Methods
@@ -46,81 +38,92 @@ public abstract class EnemyBehaviour : MonoBehaviour
 	public void Spawn()
 	{
 		m_isDead = false;
+		rigidbody.velocity = Vector3.zero;
+		rigidbody.angularVelocity = Vector3.zero;
 	}
-
-
-    public void Kill()
-    {
-        m_isDead = true;
-    }
 
 
     protected virtual void Awake()
     {
-        // Empty
+        
     }
 
 
-    protected virtual void Start()
+	protected virtual void Start()
     {
         gameObject.SetActive(false);
+        m_initialised = true;
     }
 
 
-    protected virtual void Update()
+	protected virtual void Update()
     {
-        switch (m_currentState)
+        if (m_deathTimer > 0.0f)
         {
-            case EState.MovingTowardsBarricade:
-                UpdateStateMovingTowardsTarget();
-                break;
+            m_deathTimer -= Time.deltaTime;
 
-            case EState.AttackingBarricade:
-                UpdateStateAttackingBarricade();
-                break;
+            if (m_deathTimer < 0.0f)
+            {
+                ObjectPool.Recycle(gameObject);
+            }
 
-            default:
-                Debug.LogError("Unknown state: " + m_currentState);
-                break;
-
+            return;
         }
+
+        //if (!m_hasReachedTarget)
+         //   transform.position += transform.forward * 10.0f * Time.deltaTime;
+
+
+        UpdateMovement();
     }
 
 
-    protected virtual void OnDestroy()
+	protected virtual void OnDestroy()
 	{
 		// Empty
 	}
 
 
-    void UpdateStateMovingTowardsTarget()
+    void UpdateMovement()
     {
-        // Update movement
         transform.position += Vector3.left * MovementSpeed * Time.deltaTime;
     }
 
 
-    void UpdateStateAttackingBarricade()
-    {
+	//void OnCollisionEnter(Collision _collision)
+	//{
+	//    if (!m_initialised)
+	//        return;
 
-    }
+	//    if (m_isDead)
+	//        return;
+
+	//    if(_collision.gameObject.layer == LayerMask.NameToLayer("Explosion"))
+	//    {
+	//        rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
+	//    }
+
+	//    Die();
+	//}
 
 
-	void OnCollisionEnter(Collision _collision)
+	public void Die()
 	{
 		if (m_isDead)
 			return;
 
-		if(_collision.gameObject.layer == LayerMask.NameToLayer("Explosion"))
-		{
-			rigidbody.AddForce((transform.position - _collision.transform.position).normalized * 100.0f);
-		}
+		m_isDead = true;
+		m_deathTimer = 0.5f;
 	}
 
 
-	void OnTriggerEnter(Collider _otherCollider)
+	void OnTriggerEnter(Collider _col)
 	{
-		// Game.Instance.Mage.Health -= 1;
+		transform.LookAt(transform.position + Vector3.forward);
+
+		Game.Instance.Mage.Health -= 1;
+
+		Die();
 	}
 
 

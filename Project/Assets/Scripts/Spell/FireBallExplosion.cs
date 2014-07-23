@@ -1,5 +1,5 @@
 ﻿//  
-//  File Name   :   FireBall.cs
+//  File Name   :   FireBallExplosion.cs
 //
 
 
@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class FireBall : Projectile
+public class FireBallExplosion : Explosion
 {
 
 	// Member Types
@@ -25,6 +25,9 @@ public class FireBall : Projectile
 
 
 	// Member Methods
+
+
+	
 
 
 };
