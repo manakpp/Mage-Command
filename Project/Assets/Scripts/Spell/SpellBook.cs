@@ -75,7 +75,7 @@ public class SpellBook : MonoBehaviour
 		BindSpell(SpellInputBinding.Tap, SpellLibrary.Instance.GetSpell("FireBallSpell"));
 		//BindSpell(SpellInputBinding.HoldRelease, SpellLibrary.Instance.GetSpell("IceBlockSpell"));
 		//BindSpell(SpellInputBinding.Tap, SpellLibrary.Instance.GetSpell("LightningStrikeSpell"));
-		//BindSpell(SpellInputBinding.SwipeRight, SpellLibrary.Instance.GetSpell("LightningSpell"));
+		BindSpell(SpellInputBinding.SwipeRight, SpellLibrary.Instance.GetSpell("LightningSpell"));
 
 		// These ones are WIP
 		//BindSpell(SpellInputBinding.SwipeUp, SpellLibrary.Instance.GetSpell("FireBallSpell"));

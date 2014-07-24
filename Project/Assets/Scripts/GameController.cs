@@ -259,13 +259,14 @@ public class GameController : MonoBehaviour
 		if (count < 2)
 			return;
 
+
 		// Check theyre in the same direction
 		Vector3 tilePosA = m_selectedTiles[count - 1].transform.position;
 		Vector3 tilePosB = tile.transform.position;
 		Vector3 direction = tilePosB - tilePosA;
 
 		GridSwipeDirection swipeDirection = GridSwipeDirection.None;
-		
+
 		if (direction.x < 0.0f)
 			swipeDirection = GridSwipeDirection.Left;
 		else if (direction.x > 0.0f)
@@ -277,9 +278,47 @@ public class GameController : MonoBehaviour
 		else
 			Debug.Log("WHAT HAPPEN!? " + direction);
 
-		if(swipeDirection == m_swipeDirection
+		if (swipeDirection == m_swipeDirection
 			&& direction.sqrMagnitude < 5.0f)
+		{
 			HoldTile(tile);
+			return;
+		}
+
+		//Tile perpendicularTile = null;
+
+		//if (direction.x < 0.0f || direction.x > 0.0f)
+		//{
+		//    perpendicularTile = m_selectedTiles[0].FindTilePerpendicularTo(tile, Tile.PerpendicularDirection.Horizontal);
+		//}
+		//else if (direction.z < 0.0f || direction.z > 0.0f)
+		//{
+		//    perpendicularTile = m_selectedTiles[0].FindTilePerpendicularTo(tile, Tile.PerpendicularDirection.Vertical);
+		//}
+		//else
+		//    Debug.Log("WHAT HAPPEN!? " + direction);
+
+		//if (perpendicularTile == null)
+		//    return;
+
+		//Tile nextTile = perpendicularTile;
+
+		//List<Tile> tilesInBetween = new List<Tile>();
+
+		//while (perpendicularTile != null)
+		//{
+		//    if (m_selectedTiles.Exists(x => x == tile))
+		//        break;
+
+		//    tilesInBetween.Add(perpendicularTile);
+
+		//    perpendicularTile = perpendicularTile.Links[(int)Tile.ConvertSwipeDirectionToLinkDirection(swipeDirection)];
+		//}
+
+		//foreach (var tileInBetween in tilesInBetween)
+		//{
+		//    HoldTile(tileInBetween);
+		//}
 	}
 
 
