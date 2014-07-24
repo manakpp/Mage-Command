@@ -75,6 +75,12 @@ public class Game : MonoBehaviour
 	}
 
 
+    float StartTimer
+    {
+        get { return (m_startTimer); }
+    }
+
+
 // Member Fields
 
 
@@ -89,7 +95,7 @@ public class Game : MonoBehaviour
 
     float m_startTimer              = k_startDelay;
 
-	static Game s_instance;
+	static Game s_instance          = null;
 
 
 // Member Methods
@@ -106,7 +112,6 @@ public class Game : MonoBehaviour
         m_pausedOnState = m_currentState;
         m_currentState = EState.Paused;
 
-        // Notify observers
         if (EventPause != null)
             EventPause(this);
     }
@@ -121,7 +126,6 @@ public class Game : MonoBehaviour
 
         m_currentState = m_pausedOnState;
 
-        // Notify observers
         if (EventResume != null)
             EventResume(this);
     }
@@ -136,7 +140,6 @@ public class Game : MonoBehaviour
 
         m_currentState = EState.GameOver;
 
-        // Notify observers
         if (EventGameOver != null)
             EventGameOver(this);
     }
@@ -144,18 +147,19 @@ public class Game : MonoBehaviour
 
     public void ResetAndPlay()
     {
-        // Notify observers
         if (EventRestart != null)
             EventRestart(this);
 
+        // Reset start timer
         m_startTimer = k_startDelay;
 
+        // Set menu settings
         GameMenuBehaviour.SetPanel(GameMenuBehaviour.EPanel.InGame);
-
         GameMenuBehaviour.CountdownLabelVisible = true;
 
         m_currentState = EState.StartCountDown;
 
+        // Reset object pool
 		ObjectPool.Restart();
     }
 
@@ -176,23 +180,22 @@ public class Game : MonoBehaviour
 
     void Start()
     {
-        InitGameMenu();
+        InitialiseGameMenu();
 
         // Start game
         ResetAndPlay();
 
-		m_mage = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
-
 		// Sign up to stats change
-		m_mage.EventManaChanged += OnManaChanged;
-		m_mage.EventHealthChanged += OnHealthChanged;
+        m_mage                     = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
+		m_mage.EventManaChanged   += OnEventMageManaChanged;
+        m_mage.EventHealthChanged += OnEventMageHealthChanged;
     }
 
 
 	void OnDestroy()
 	{
-		m_mage.EventManaChanged -= OnManaChanged;
-		m_mage.EventHealthChanged -= OnHealthChanged;
+		m_mage.EventManaChanged   -= OnEventMageManaChanged;
+        m_mage.EventHealthChanged -= OnEventMageHealthChanged;
 	}
 
 
@@ -223,14 +226,12 @@ public class Game : MonoBehaviour
     }
 
 
-    void InitGameMenu()
+    void InitialiseGameMenu()
     {
-        GameMenuBehaviour gameMenuBehaviour = GameMenuBehaviour;
-
-        gameMenuBehaviour.EventPauseButtonPress     += OnEventPauseButtonPress;
-        gameMenuBehaviour.EventResumeButtonPress    += OnEventResumeButtonPress;
-        gameMenuBehaviour.EventRestartButtonPress   += OnEventRestartButtonPress;
-        gameMenuBehaviour.EventQuitButtonPress      += OnEventQuitButtonPress;
+        GameMenuBehaviour.EventPauseButtonPress   += OnEventPauseButtonPress;
+        GameMenuBehaviour.EventResumeButtonPress  += OnEventResumeButtonPress;
+        GameMenuBehaviour.EventRestartButtonPress += OnEventRestartButtonPress;
+        GameMenuBehaviour.EventQuitButtonPress    += OnEventQuitButtonPress;
     }
 
 
@@ -249,11 +250,11 @@ public class Game : MonoBehaviour
         }
         else
         {
+            // Start game
             GameMenuBehaviour.CountdownLabelVisible = false;
 
             m_currentState = EState.Playing;
 
-            // Notify observers
             if (EventStart != null)
                 EventStart(this);
         }
@@ -302,13 +303,13 @@ public class Game : MonoBehaviour
     }
 
 
-	void OnManaChanged(Mage _sender, float _currentMana, float _maxMana, float _prevMana)
+	void OnEventMageManaChanged(Mage _sender, float _currentMana, float _maxMana, float _prevMana)
 	{
 		GameMenuBehaviour.SetManaRatio(_currentMana / _maxMana);
 	}
 
 
-	void OnHealthChanged(Mage _sender, int _currentHealth, int _maxHealth, int _prevHealth)
+	void OnEventMageHealthChanged(Mage _sender, int _currentHealth, int _maxHealth, int _prevHealth)
 	{
 		GameMenuBehaviour.SetHealthRatio((float)_currentHealth / (float)_maxHealth);
 		
