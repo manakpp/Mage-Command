@@ -71,10 +71,13 @@ public class SpellBook : MonoBehaviour
 		// TODO: From save data we can populate the spell book.
 		m_spellLookup = new Dictionary<SpellInputBinding, Spell>();
 
-
+		// These ones are working
 		BindSpell(SpellInputBinding.Tap, SpellLibrary.Instance.GetSpell("FireBallSpell"));
-		//BindSpell(SpellInputBinding.SwipeUp, SpellLibrary.Instance.GetSpell("IceBlockSpell"));
-		BindSpell(SpellInputBinding.HoldRelease, SpellLibrary.Instance.GetSpell("IceBlockSpell"));
+		//BindSpell(SpellInputBinding.HoldRelease, SpellLibrary.Instance.GetSpell("IceBlockSpell"));
+		//BindSpell(SpellInputBinding.Tap, SpellLibrary.Instance.GetSpell("LightningStrikeSpell"));
+		BindSpell(SpellInputBinding.SwipeRight, SpellLibrary.Instance.GetSpell("LightningSpell"));
+
+		// These ones are WIP
 		//BindSpell(SpellInputBinding.SwipeUp, SpellLibrary.Instance.GetSpell("FireBallSpell"));
 		//BindSpell(SpellInputBinding.SwipeDown, SpellLibrary.Instance.GetSpell("FireBallSpell"));
 		//BindSpell(SpellInputBinding.SwipeLeft, SpellLibrary.Instance.GetSpell("FireBallSpell"));

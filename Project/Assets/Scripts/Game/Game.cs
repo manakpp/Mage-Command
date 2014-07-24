@@ -56,6 +56,12 @@ public class Game : MonoBehaviour
 	}
 
 
+	public Grid Grid
+	{
+		get { return m_groundGrid; }
+	}
+
+
 	public GameController Controller
 	{
 		get;
@@ -87,7 +93,8 @@ public class Game : MonoBehaviour
     const float k_startDelay        = 6.0f;
 
     public GameObject m_gameMenu    = null;
-
+	
+	Grid m_groundGrid				= null;
 	Mage m_mage						= null;
 
     EState m_currentState           = EState.INVALID;
@@ -185,6 +192,7 @@ public class Game : MonoBehaviour
         // Start game
         ResetAndPlay();
 
+		m_groundGrid = GameObject.FindGameObjectWithTag("GroundGrid").GetComponent<Grid>();
 		// Sign up to stats change
         m_mage                     = GameObject.FindGameObjectWithTag("Mage").GetComponent<Mage>();
 		m_mage.EventManaChanged   += OnEventMageManaChanged;

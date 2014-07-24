@@ -50,7 +50,7 @@ public class FireBallSpell : Spell
 		if (newProjectile == null)
 			return;
 
-		var ball = newProjectile.GetComponent<FireBallProjectile>();
+		var ball = newProjectile.GetComponent<Projectile>();
 
 		ball.Shoot(startPosition, destination);
 
